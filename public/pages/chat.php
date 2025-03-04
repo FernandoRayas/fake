@@ -87,7 +87,8 @@ if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] != 'admin') {
 </head>
 <body>
     <div class="logout-container">
-        <a href="../auth/logout.php" class="btn btn-danger">Cerrar sesión</a>
+        <!-- <a href="../auth/logout.php" class="btn btn-danger">Cerrar sesión</a> -->
+        <a href="dashboard.php" class="btn btn-danger mb-3">Volver</a>
     </div>
     <div class="chat-container">
         <div class="chat-header">Chat en Vivo</div>

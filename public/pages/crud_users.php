@@ -25,7 +25,8 @@ $result = $conn->query($sql);
 </head>
 <body class="container mt-4">
     <h1 class="text-center">Administración de Usuarios</h1>
-    <a href="../auth/logout.php" class="btn btn-danger mb-3">Cerrar sesión</a>
+    <!-- <a href="../auth/logout.php" class="btn btn-danger mb-3">Cerrar sesión</a> -->
+    <a href="dashboard.php" class="btn btn-danger mb-3">Volver</a>
     <a href="../crud_users/crear_usuario.php" class="btn btn-success mb-3">Agregar Usuario</a>
 
     <!-- Tabla principal -->

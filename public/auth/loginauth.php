@@ -24,7 +24,7 @@ if (isset($_POST['btnLogin'])) {
 
         // Redirigir según rol
         if ($user['role'] == 'admin') {
-            header("Location: ../pages/admin.php");
+            header("Location: ../pages/dashboard.php");
         } elseif ($user['role'] == 'user') {
             header("Location: ../pages/home.php");
         } else {
