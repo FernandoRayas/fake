@@ -22,14 +22,8 @@ if (isset($_POST['btnLogin'])) {
         $_SESSION['user_name'] = $user['name'];
         $_SESSION['user_role'] = $user['role'];
 
-        // Redirigir según rol
-        if ($user['role'] == 'admin') {
-            header("Location: ../pages/dashboard.php");
-        } elseif ($user['role'] == 'user') {
-            header("Location: ../pages/home.php");
-        } else {
-            header("Location: ../index.php");
-        }
+        // Redirigir a todos al mismo dashboard
+        header("Location: ../pages/dashboard.php");
         exit();
     }
 

@@ -1,7 +1,8 @@
 <?php
 session_start();
-if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] != 'user') {
-    header("Location: index.php"); // Redirigir si no es un usuario normal
+
+if (!isset($_SESSION['user_role'])) {
+    header("Location: ../index.php"); // Redirigir si no está autenticado
     exit();
 }
 ?>
@@ -13,6 +14,7 @@ if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] != 'user') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="../images/icono_fake.png" type="image/x-icon">
     <title>Home - Fake</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -141,6 +143,6 @@ if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] != 'user') {
     </div>
 
     <!-- Cerrar sesión -->
-    <a href="../auth/logout.php" class="logout">Cerrar sesión</a>
+    <a href="dashboard.php" class="btn btn-danger mt-3"><i class="fas fa-sign-out-alt"></i> Volver</a>
 </body>
 </html>

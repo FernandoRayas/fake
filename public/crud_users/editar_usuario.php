@@ -47,7 +47,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         // Ejecuta y redirige si es exitoso
         if ($stmt->execute()) {
-            header("Location: ../pages/admin.php");
+            header("Location: ../pages/crud_users.php");
             exit();
         } else {
             $mensaje = "Error al actualizar usuario.";
@@ -165,7 +165,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </form>
 
     <!-- Enlace de regreso -->
-    <a class="back-link" href="../pages/admin.php">Volver a la Administración</a>
+    <a class="back-link" href="../pages/crud_users.php">Volver a la Administración</a> <!-- Enlace para regresar -->
 </div>
 
 </body>

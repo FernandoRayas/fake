@@ -33,7 +33,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt->bind_param("ssss", $name, $email, $password, $role);
 
         if ($stmt->execute()) {
-            header("Location: ../pages/admin.php");
+            header("Location: ../pages/crud_users.php");
             exit();
         } else {
             $mensaje = "Error al crear usuario.";
@@ -144,7 +144,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <button type="submit">Crear Usuario</button>
     </form>
 
-    <a class="back-link" href="../pages/admin.php">Volver a la Administración</a> <!-- Enlace para regresar -->
+    <a class="back-link" href="../pages/crud_users.php">Volver a la Administración</a> <!-- Enlace para regresar -->
 </div>
 
 </body>

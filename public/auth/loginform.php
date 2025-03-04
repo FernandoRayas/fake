@@ -75,7 +75,7 @@
     <div class="login-container">
         <img src="../images/fake_logo.jpg" alt="Fake Logo" class="logo">
         
-        <h2>Bienvenido estudiante</h2>
+        <h2>Bienvenido a Fake</h2>
         <form action="loginauth.php" method="post" onsubmit="return validarFormulario()">
             <input type="text" name="email" id="email" placeholder="Correo electrónico" required>
             <p id="emailError" class="error">Correo inválido.</p>

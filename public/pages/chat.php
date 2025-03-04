@@ -1,9 +1,10 @@
 <?php
 session_start();
-if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] != 'admin') {
-    header("Location: index.php");
+if (!isset($_SESSION['user_id'])) {
+    header("Location: login.php");
     exit();
 }
+$user_id = $_SESSION['user_id'];
 ?>
 
 <!DOCTYPE html>
@@ -11,95 +12,200 @@ if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] != 'admin') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chat</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <title>Chat en Vivo</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <!-- Agregamos Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
-            background: #4AC29A;  /* fallback for old browsers */
-            background: -webkit-linear-gradient(to top, #BDFFF3, #4AC29A);  /* Chrome 10-25, Safari 5.1-6 */
-            background: linear-gradient(to top, #BDFFF3, #4AC29A); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to top, #BDFFF3, #4AC29A);
             display: flex;
-            flex-direction: column;
-            align-items: center;
             height: 100vh;
-            position: relative;
         }
-        .logout-container {
-            position: absolute;
-            top: 20px;
-            left: 20px;
+        .sidebar {
+            background: #2C3E50;
+            color: white;
+            padding: 20px;
+            height: 100vh;
+            overflow-y: auto;
+            z-index: 10;
+        }
+        .sidebar h3 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .user {
+            padding: 10px;
+            cursor: pointer;
+            border-bottom: 1px solid #34495E;
+        }
+        .user:hover {
+            background: #34495E;
         }
         .chat-container {
-            width: 100%;
-            max-width: 600px;
             background: white;
             border-radius: 10px;
             box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            height: 100%;
             overflow: hidden;
-            margin-top: 50px;
+            padding: 20px;
         }
         .chat-header {
-            background: #007bff;
-            color: white;
-            padding: 15px;
-            text-align: center;
-            font-size: 18px;
-            font-weight: bold;
+            font-size: 1.5em;
+            margin-bottom: 20px;
         }
         .chat-body {
-            height: 400px;
-            overflow-y: auto;
-            padding: 15px;
-            background: #e9ecef;
+            height: calc(100vh - 200px); /* Ajusta la altura total */
+            overflow-y: auto; /* Scroll cuando haya muchos mensajes */
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: white;
+            box-sizing: border-box; /* Asegura que padding y border se cuenten */
+            display: flex; /* Flexbox para controlar el layout */
+            flex-direction: column; /* Apila los mensajes verticalmente */
+        }
+        .chat-footer {
+            display: flex;
+            justify-content: space-between;
         }
         .chat-message {
-            margin-bottom: 10px;
             padding: 10px;
-            border-radius: 8px;
-            max-width: 75%;
+            margin: 5px 0;
+            border-radius: 5px;
+            word-wrap: break-word; /* Para manejar palabras largas */
+            display: block; /* Los mensajes se apilan uno encima del otro */
+            max-width: 70%; /* Limita el ancho del mensaje al 70% */
+            white-space: pre-wrap; /* Mantiene los saltos de línea en el mensaje */
         }
         .message-sent {
             background: #007bff;
             color: white;
-            align-self: flex-end;
-            text-align: right;
+            text-align: right; /* Alinea el mensaje a la derecha */
+            margin-left: auto; /* Mueve el mensaje a la derecha */
         }
         .message-received {
-            background: #ffffff;
-            border: 1px solid #dee2e6;
+            background: #f1f1f1;
+            text-align: left; /* Alinea el mensaje a la izquierda */
+            margin-right: auto; /* Mueve el mensaje a la izquierda */
         }
-        .chat-footer {
-            padding: 10px;
-            background: #f8f9fa;
-            border-top: 1px solid #dee2e6;
-            display: flex;
-        }
-        .chat-footer input {
-            flex: 1;
+        input[type="text"] {
+            width: 80%;
             padding: 10px;
             border-radius: 5px;
-            border: 1px solid #ced4da;
+            border: 1px solid #ddd;
         }
-        .chat-footer button {
-            margin-left: 10px;
+        button {
+            padding: 10px;
+            border-radius: 5px;
+            background: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #0056b3;
         }
     </style>
+    <script src="https://cdn.jsdelivr.net/npm/vue@3/dist/vue.global.prod.js"></script>
 </head>
 <body>
-    <div class="logout-container">
-        <!-- <a href="../auth/logout.php" class="btn btn-danger">Cerrar sesión</a> -->
-        <a href="dashboard.php" class="btn btn-danger mb-3">Volver</a>
-    </div>
-    <div class="chat-container">
-        <div class="chat-header">Chat en Vivo</div>
-        <div class="chat-body d-flex flex-column">
-            <div class="chat-message message-received">Hola, ¿cómo estás?</div>
-            <div class="chat-message message-sent">¡Hola! Todo bien, ¿y tú?</div>
+    <div id="app" class="container-fluid">
+        <div class="row">
+            <!-- Sidebar de usuarios -->
+            <div class="col-md-3 col-lg-2 sidebar">
+                <a href="dashboard.php" class="btn btn-danger mb-3">Volver</a>
+                <h3>Usuarios</h3>
+                <div v-for="user in users" :key="user.id" class="user" @click="selectUser(user)">
+                    {{ user.username }}
+                </div>
+            </div>
+
+            <!-- Contenedor de chat -->
+            <div class="col-md-9 col-lg-10">
+                <div class="chat-container" v-if="selectedUser">
+                    <div class="chat-header">Chat con {{ selectedUser.username }}</div>
+                    <div class="chat-body">
+                        <div v-if="messages.length === 0">No hay mensajes aún.</div>
+                        <div v-for="msg in messages" :key="msg.sender_id + msg.text" :class="['chat-message', msg.sent ? 'message-sent' : 'message-received']">
+                            <div v-if="!msg.sent"></div>{{ msg.text }}
+                        </div>
+                    </div>
+                    <div class="chat-footer mt-4">
+                        <input type="text" v-model="newMessage" placeholder="Escribe un mensaje...">
+                        <button @click="sendMessage">Enviar</button>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="chat-footer">
-            <input type="text" class="form-control" placeholder="Escribe un mensaje...">
-            <button class="btn btn-primary">Enviar</button>
-        </div>
     </div>
+
+<script>
+const { createApp } = Vue;
+
+createApp({
+    data() {
+        return {
+            users: [],
+            messages: [],
+            newMessage: '',
+            selectedUser: null,
+            currentUserId: <?php echo json_encode($user_id); ?>
+        };
+    },
+    mounted() {
+        this.loadUsers();
+        setInterval(() => {
+            if (this.selectedUser) this.loadMessages();
+        }, 2000);
+    },
+    methods: {
+        async loadUsers() {
+            const response = await fetch("../../chat/get_users.php");
+            this.users = await response.json();
+        },
+        async loadMessages() {
+            if (!this.selectedUser) return;
+            const response = await fetch(`../../chat/get_message.php?receiver_id=${this.selectedUser.id}`);
+            const data = await response.json();
+            // console.log(data);  // Verifica que el formato sea el esperado
+            this.messages = [...data.messages];  // Usar spread operator para forzar la actualización
+        },
+        async sendMessage() {
+            if (this.newMessage.trim() !== '') {
+                let messageData = {
+                    message: this.newMessage,
+                    receiver_id: this.selectedUser.id
+                };
+
+                try {
+                    const response = await fetch("../../chat/chat_backend.php", {
+                        method: "POST",
+                        body: JSON.stringify(messageData),
+                        headers: { "Content-Type": "application/json" }
+                    });
+
+                    const result = await response.json();
+                    console.log("Respuesta del servidor:", result);
+
+                    if (result.status === "success") {
+                        this.newMessage = ''; // Limpia el campo de texto
+                        setTimeout(() => this.loadMessages(), 200); // Espera un momento y recarga
+                    }
+                } catch (error) {
+                    console.error("Error enviando mensaje:", error);
+                }
+            }
+        },
+        selectUser(user) {
+            this.selectedUser = user;
+            this.loadMessages();
+        }
+    }
+}).mount("#app");
+</script>
+
 </body>
 </html>
