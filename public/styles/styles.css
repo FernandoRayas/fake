@@ -187,6 +187,13 @@ body {
     color: #dc3545; /* Rojo para "No leído" */
 }
 
+.urgent-count {
+    font-size: 0.9em;
+    color: red;
+    margin-left: 10px;
+}
+
+
 
 input[type="text"] {
     width: 80%;
