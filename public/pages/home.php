@@ -101,6 +101,16 @@ if (!isset($_SESSION['user_role'])) {
     </style>
 </head>
 <body>
+    <!-- Breadcrumb -->
+    <div class="container mt-3">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb bg-white p-2 rounded">
+                <li class="breadcrumb-item"><a href="dashboard.php">Dashboard</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Tienda Online</li>
+            </ol>
+        </nav>
+    </div>
+
     <!-- Logo -->
     <img src="../images/fake_logo.jpg" alt="Fake Logo" class="logo">
 

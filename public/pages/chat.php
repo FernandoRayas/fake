@@ -22,6 +22,15 @@ $user_id = $_SESSION['user_id'];
     <div id="app" class="container-fluid">
         <div class="row">
             <div class="col-md-3 col-lg-2 sidebar">
+                <!-- Breadcrumb -->
+                <div class="container mt-3">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb bg-white p-2 rounded">
+                    <li class="breadcrumb-item"><a href="dashboard.php">Dashboard</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Chat</li>
+                    </ol>
+                </nav>
+                </div>
                 <a href="dashboard.php" class="btn btn-danger mb-3">Volver</a>
                 <div class="conversations-header mb-2">
                     <h3>Conversaciones</h3>

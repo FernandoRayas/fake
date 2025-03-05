@@ -24,6 +24,14 @@ $result = $conn->query($sql);
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
 </head>
 <body class="container mt-4">
+    <div class="container mt-3">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb bg-white p-2 rounded">
+                    <li class="breadcrumb-item"><a href="dashboard.php">Dashboard</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Administración de Usuarios</li>
+                </ol>
+            </nav>
+        </div>
     <h1 class="text-center">Administración de Usuarios</h1>
     <!-- <a href="../auth/logout.php" class="btn btn-danger mb-3">Cerrar sesión</a> -->
     <a href="dashboard.php" class="btn btn-danger mb-3">Volver</a>
