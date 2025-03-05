@@ -2,12 +2,19 @@
 session_start();
 
 if (isset($_POST['btnLogin'])) {
+    // Verificar CAPTCHA
+    if ($_POST['captcha'] !== "smwm") {
+        // Si el CAPTCHA no es correcto
+        header("Location: fail.php?error=1");
+        exit();
+    }
+
     $txtEmail = $_POST['email'];
     $txtPassword = $_POST['password'];
 
     include "../modelo/conexion.php";
 
-    // Consulta preparada
+    // Consulta preparada para evitar SQL Injection
     $sql = "SELECT * FROM users WHERE email = ? AND password = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("ss", $txtEmail, $txtPassword);
@@ -22,12 +29,12 @@ if (isset($_POST['btnLogin'])) {
         $_SESSION['user_name'] = $user['name'];
         $_SESSION['user_role'] = $user['role'];
 
-        // Redirigir a todos al mismo dashboard
+        // Redirigir a todos al dashboard
         header("Location: ../pages/dashboard.php");
         exit();
     }
 
-    // Error
+    // Si el usuario no es válido
     header("Location: fail.php?error=1");
     exit();
 }

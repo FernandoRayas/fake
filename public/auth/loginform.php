@@ -74,7 +74,7 @@
 <body>
     <div class="login-container">
         <img src="../images/fake_logo.jpg" alt="Fake Logo" class="logo">
-        
+
         <h2>Bienvenido a Fake</h2>
         <form action="loginauth.php" method="post" onsubmit="return validarFormulario()">
             <input type="text" name="email" id="email" placeholder="Correo electrónico" required>
@@ -83,9 +83,17 @@
             <input type="password" name="password" id="password" placeholder="Contraseña" required>
             <p id="passwordError" class="error">La contraseña no debe contener caracteres especiales.</p>
 
+            <!-- Imagen CAPTCHA (la imagen predefinida) -->
+            <img src="https://e7.pngegg.com/pngimages/917/842/png-clipart-captcha-user-computer-program-computer-security-computer-software-computer-text-computer.png" alt="Captcha" id="captcha-image" height="80px">
+
+            <!-- Campo para ingresar el captcha -->
+            <input type="text" name="captcha" id="captcha" placeholder="Que dice la imagen?" required>
+            <p id="captchaError" class="error">¡Captcha incorrecto!</p>
+
             <input type="submit" name="btnLogin" value="Iniciar sesión">
         </form>
     </div>
+
 
     <script>
         function validarFormulario() {

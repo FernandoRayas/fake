@@ -72,16 +72,25 @@ $user_id = $_SESSION['user_id'];
                                 <span v-if="msg.category === 'Importante'" style="color: blue; font-weight: bold;">* </span>
                                 <span v-if="msg.priority === 'urgente'" class="urgent-flag"> * </span>
                             </div>
+                            
                             <div class="message-options">
                                 <i :class="{'fas fa-bell': msg.priority !== 'urgente', 'fas fa-bell-slash': msg.priority === 'urgente'}"
                                 @click="toggleUrgency(msg)" class="bell-icon"></i>
                             </div>
-                            <div class="status">
-                                <span :class="{'text-success': msg.status === 'visto', 'text-danger': msg.status === 'no_leido'}">
-                                    {{ msg.status === 'no_leido' ? 'No leído' : msg.status === 'visto' ? 'Visto' : 'En espera' }}
-                                </span>
+
+                            <!-- Aquí agregamos la fecha y el estado debajo del mensaje -->
+                            <div class="message-footer">
+                                <div class="status">
+                                    <span :class="{'text-success': msg.status === 'visto', 'text-danger': msg.status === 'no_leido'}">
+                                        {{ msg.status === 'no_leido' ? 'No leído' : msg.status === 'visto' ? 'Visto' : 'En espera' }}
+                                    </span>
+                                </div>
+                                <div class="date">
+                                    <span class="text-muted">{{ formatDate(msg.created_at) }}</span>
+                                </div>
                             </div>
                         </div>
+
                     </div>
                     <div class="chat-footer mt-4">
                         <input type="text" v-model="newMessage" placeholder="Escribe un mensaje...">
@@ -160,6 +169,10 @@ $user_id = $_SESSION['user_id'];
                 this.applyFilter(); // Aplica el filtro después de cargar los mensajes
                 // Llamar a la función para marcar los mensajes como leídos
                 await this.markMessagesAsRead();
+            },
+            formatDate(dateString) {
+                const date = new Date(dateString);
+                return date.toLocaleString();  // Puedes personalizar el formato según tus necesidades
             },
             applyFilter() {
                 if (this.selectedCategory === 'Urgente') {
