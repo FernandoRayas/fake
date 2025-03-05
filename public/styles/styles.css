@@ -38,7 +38,7 @@ body {
     margin-bottom: 20px;
 }
 .chat-body {
-    height: calc(100vh - 200px); /* Ajusta la altura total */
+    height: calc(100vh - 250px); /* Ajusta la altura total */
     overflow-y: auto; /* Scroll cuando haya muchos mensajes */
     padding: 10px;
     border: 1px solid #ddd;
@@ -192,6 +192,47 @@ body {
     color: red;
     margin-left: 10px;
 }
+
+
+/* Contenedor del select */
+.select-container {
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+/* Estilo para las etiquetas */
+.select-label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+/* Estilo para los selects */
+.select-box {
+    padding: 8px 12px;
+    font-size: 14px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    outline: none;
+    background-color: #f9f9f9;
+    transition: border-color 0.3s ease;
+    width: 100%;
+}
+
+/* Estilo cuando el select tiene foco */
+.select-box:focus {
+    border-color: #007bff;
+    background-color: #fff;
+}
+
+/* Hacer que las opciones se vean bien */
+.select-box option {
+    padding: 10px;
+}
+
 
 
 

@@ -29,10 +29,11 @@ try {
 
     // Iteramos sobre los usuarios
     while ($row = $result->fetch_assoc()) {
-        // Contamos los mensajes urgentes para este usuario
-        $urgentCountSql = "SELECT COUNT(*) AS urgent_count FROM chats WHERE receiver_id = ? AND priority = 'urgente'";
+        // Contamos los mensajes urgentes enviados al usuario actual
+        $urgentCountSql = "SELECT COUNT(*) AS urgent_count FROM chats 
+                           WHERE receiver_id = ? AND sender_id = ? AND priority = 'urgente'";
         $urgentStmt = $conn->prepare($urgentCountSql);
-        $urgentStmt->bind_param("i", $row['id']);
+        $urgentStmt->bind_param("ii", $user_id, $row['id']);
         $urgentStmt->execute();
         $urgentResult = $urgentStmt->get_result();
         $urgentCount = $urgentResult->fetch_assoc()['urgent_count'];
