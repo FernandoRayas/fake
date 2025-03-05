@@ -14,9 +14,12 @@ $user_id = $_SESSION['user_id'];
 $receiver_id = $data['receiver_id'];
 $message = $data['message'];
 
-$sql = "INSERT INTO chats (sender_id, receiver_id, message) VALUES (?, ?, ?)";
+// Estado inicial del mensaje cuando se envía
+$status = 'no_leido';
+
+$sql = "INSERT INTO chats (sender_id, receiver_id, message, status) VALUES (?, ?, ?, ?)";
 $stmt = $conn->prepare($sql);
-$stmt->bind_param("iis", $user_id, $receiver_id, $message);
+$stmt->bind_param("iiss", $user_id, $receiver_id, $message, $status);
 $stmt->execute();
 
 echo json_encode(["status" => "success"]);

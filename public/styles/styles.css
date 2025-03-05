@@ -1,0 +1,207 @@
+body {
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(to top, #BDFFF3, #4AC29A);
+    display: flex;
+    height: 100vh;
+}
+.sidebar {
+    background: #2C3E50;
+    color: white;
+    padding: 20px;
+    height: 100vh;
+    overflow-y: auto;
+    z-index: 10;
+}
+.sidebar h3 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+.user {
+    padding: 10px;
+    cursor: pointer;
+    border-bottom: 1px solid #34495E;
+}
+.user:hover {
+    background: #34495E;
+}
+.chat-container {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    height: 100%;
+    overflow: hidden;
+    padding: 20px;
+}
+.chat-header {
+    font-size: 1.5em;
+    margin-bottom: 20px;
+}
+.chat-body {
+    height: calc(100vh - 200px); /* Ajusta la altura total */
+    overflow-y: auto; /* Scroll cuando haya muchos mensajes */
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: white;
+    box-sizing: border-box; /* Asegura que padding y border se cuenten */
+    display: flex; /* Flexbox para controlar el layout */
+    flex-direction: column; /* Apila los mensajes verticalmente */
+}
+.chat-footer {
+    display: flex;
+    justify-content: space-between;
+}
+.chat-message {
+    padding: 10px;
+    margin: 5px 0;
+    border-radius: 5px;
+    word-wrap: break-word; /* Para manejar palabras largas */
+    display: block; /* Los mensajes se apilan uno encima del otro */
+    max-width: 70%; /* Limita el ancho del mensaje al 70% */
+    white-space: pre-wrap; /* Mantiene los saltos de línea en el mensaje */
+}
+.message-sent {
+    background: #d4edda; /* Fondo verde claro */
+    color: #155724; /* Texto verde oscuro */
+    text-align: right; /* Alinea el mensaje a la derecha */
+    margin-left: auto; /* Mueve el mensaje a la derecha */
+}
+.message-received {
+    background: #f9f9f9; /* Fondo claro para los mensajes recibidos */
+    text-align: left; /* Alinea el mensaje a la izquierda */
+    margin-right: auto; /* Mueve el mensaje a la izquierda */
+}
+/* Estilo para mensajes urgentes */
+.urgent-message {
+    color: red; /* Cambiar el color del texto a rojo */
+    font-weight: bold; /* Hacer el texto en negrita */
+}
+
+/* Estilo para el asterisco y la palabra "Urgente" */
+.urgent-flag {
+    color: red; /* Color rojo para el asterisco */
+    font-weight: bold;
+    margin-left: 5px; /* Separación entre el mensaje y el asterisco */
+}
+
+/* Contenedor de los mensajes */
+.chat-message {
+    position: relative;
+    margin-bottom: 10px;
+    padding: 10px 15px; /* Aumentado el padding para que se vea más espacioso */
+    border-radius: 8px; /* Bordes redondeados */
+    background-color: #f9f9f9; /* Fondo de mensaje claro por defecto (para los mensajes recibidos) */
+    color: #333; /* Color del texto */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Contenedor de la campana fuera del mensaje */
+.message-options {
+    cursor: pointer;
+    font-size: 20px; /* Ajuste del tamaño del ícono */
+    color: #333; /* Color del ícono */
+    background: none; /* Elimina el fondo de la campana */
+    border: none; /* Elimina cualquier borde */
+    padding: 0; /* Sin padding */
+}
+
+/* Cuando el mensaje es enviado, la campana estará a la izquierda */
+.message-sent .message-options {
+    position: absolute;
+    left: -30px; /* Posiciona la campana a la izquierda */
+}
+
+/* Cuando el mensaje es recibido, la campana estará a la derecha */
+.message-received .message-options {
+    position: absolute;
+    right: -30px; /* Posiciona la campana a la derecha */
+}
+
+/* Campana normal */
+.fas.fa-bell {
+    color: grey; /* Color gris para la campana normal */
+}
+
+/* Campana para urgente */
+.fas.fa-bell-slash {
+    color: orange; /* Color naranja para la campana de urgente */
+}
+
+/* Efecto hover sobre la campana */
+.bell-icon:hover {
+    color: #f39c12; /* Cambia el color de la campana a naranja al pasar el ratón */
+}
+
+/* Estilo para el mensaje urgente */
+.urgent-message {
+    color: orange; /* Cambiar color de texto si es urgente */
+}
+
+/* Flag para mensaje urgente */
+.urgent-flag {
+    font-weight: bold;
+    color: orange;
+}
+
+/* Fondo verde claro para tus mensajes enviados */
+.message-sent {
+    background-color: #d4edda; /* Verde claro */
+    border: 1px solid #c3e6cb; /* Borde del verde */
+    color: #155724; /* Texto en verde oscuro */
+}
+
+/* Fondo gris claro para los mensajes recibidos */
+.message-received {
+    background-color: #f9f9f9; /* Fondo de mensaje claro */
+    border: 1px solid #d6d6d6; /* Borde gris */
+}
+
+/* Elimina el fondo de la campana */
+.message-options {
+    background: none !important; /* Elimina el fondo de la campana */
+    padding: 0 !important; /* Asegura que no haya padding extra */
+    border: none !important; /* Asegura que no haya borde */
+}
+
+.status {
+    display: inline-block;
+    background-color: white; /* Fondo blanco para el estatus */
+    padding: 5px 10px; /* Espaciado interno para que se vea más claro */
+    border-radius: 5px; /* Bordes redondeados para el estatus */
+    font-weight: bold; /* Negrita para resaltar el estatus */
+    margin-top: 5px; /* Separación entre el mensaje y el estatus */
+}
+
+.status span {
+    font-size: 0.9em; /* Tamaño del texto para el estatus */
+}
+
+.text-success {
+    color: #28a745; /* Verde para "Visto" */
+}
+
+.text-danger {
+    color: #dc3545; /* Rojo para "No leído" */
+}
+
+
+input[type="text"] {
+    width: 80%;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+}
+button {
+    padding: 10px;
+    border-radius: 5px;
+    background: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+button:hover {
+    background: #0056b3;
+}

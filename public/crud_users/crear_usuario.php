@@ -137,6 +137,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <label for="role">Rol:</label>
             <select name="role" id="role">
                 <option value="admin">Admin</option>
+                <option value="master">Docente</option>
                 <option value="user">Usuario</option>
             </select>
         </div>

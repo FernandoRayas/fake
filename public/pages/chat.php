@@ -16,99 +16,8 @@ $user_id = $_SESSION['user_id'];
     <link rel="stylesheet" href="css/styles.css">
     <!-- Agregamos Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            background: linear-gradient(to top, #BDFFF3, #4AC29A);
-            display: flex;
-            height: 100vh;
-        }
-        .sidebar {
-            background: #2C3E50;
-            color: white;
-            padding: 20px;
-            height: 100vh;
-            overflow-y: auto;
-            z-index: 10;
-        }
-        .sidebar h3 {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        .user {
-            padding: 10px;
-            cursor: pointer;
-            border-bottom: 1px solid #34495E;
-        }
-        .user:hover {
-            background: #34495E;
-        }
-        .chat-container {
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-            height: 100%;
-            overflow: hidden;
-            padding: 20px;
-        }
-        .chat-header {
-            font-size: 1.5em;
-            margin-bottom: 20px;
-        }
-        .chat-body {
-            height: calc(100vh - 200px); /* Ajusta la altura total */
-            overflow-y: auto; /* Scroll cuando haya muchos mensajes */
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            background-color: white;
-            box-sizing: border-box; /* Asegura que padding y border se cuenten */
-            display: flex; /* Flexbox para controlar el layout */
-            flex-direction: column; /* Apila los mensajes verticalmente */
-        }
-        .chat-footer {
-            display: flex;
-            justify-content: space-between;
-        }
-        .chat-message {
-            padding: 10px;
-            margin: 5px 0;
-            border-radius: 5px;
-            word-wrap: break-word; /* Para manejar palabras largas */
-            display: block; /* Los mensajes se apilan uno encima del otro */
-            max-width: 70%; /* Limita el ancho del mensaje al 70% */
-            white-space: pre-wrap; /* Mantiene los saltos de línea en el mensaje */
-        }
-        .message-sent {
-            background: #007bff;
-            color: white;
-            text-align: right; /* Alinea el mensaje a la derecha */
-            margin-left: auto; /* Mueve el mensaje a la derecha */
-        }
-        .message-received {
-            background: #f1f1f1;
-            text-align: left; /* Alinea el mensaje a la izquierda */
-            margin-right: auto; /* Mueve el mensaje a la izquierda */
-        }
-        input[type="text"] {
-            width: 80%;
-            padding: 10px;
-            border-radius: 5px;
-            border: 1px solid #ddd;
-        }
-        button {
-            padding: 10px;
-            border-radius: 5px;
-            background: #007bff;
-            color: white;
-            border: none;
-            cursor: pointer;
-        }
-        button:hover {
-            background: #0056b3;
-        }
-    </style>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../styles/styles.css">
     <script src="https://cdn.jsdelivr.net/npm/vue@3/dist/vue.global.prod.js"></script>
 </head>
 <body>
@@ -118,8 +27,19 @@ $user_id = $_SESSION['user_id'];
             <div class="col-md-3 col-lg-2 sidebar">
                 <a href="dashboard.php" class="btn btn-danger mb-3">Volver</a>
                 <h3>Usuarios</h3>
-                <div v-for="user in users" :key="user.id" class="user" @click="selectUser(user)">
-                    {{ user.username }}
+                
+                <div>
+                    <h4>Docentes</h4>
+                    <div v-for="user in masterUsers" :key="user.id" class="user" @click="selectUser(user)">
+                        {{ user.username }}
+                    </div>
+                </div>
+
+                <div>
+                    <h4>Estudiantes</h4>
+                    <div v-for="user in normalUsers" :key="user.id" class="user" @click="selectUser(user)">
+                        {{ user.username }}
+                    </div>
                 </div>
             </div>
 
@@ -130,7 +50,26 @@ $user_id = $_SESSION['user_id'];
                     <div class="chat-body">
                         <div v-if="messages.length === 0">No hay mensajes aún.</div>
                         <div v-for="msg in messages" :key="msg.sender_id + msg.text" :class="['chat-message', msg.sent ? 'message-sent' : 'message-received']">
-                            <div v-if="!msg.sent"></div>{{ msg.text }}
+                            <div :class="{'urgent-message': msg.priority === 'urgente'}">
+                                <!-- Mensaje de texto -->
+                                {{ msg.text }}
+                                <!-- Asterisco y la etiqueta "Urgente" se muestra si el mensaje tiene la prioridad urgente -->
+                                <span v-if="msg.priority === 'urgente'" class="urgent-flag"> * </span>
+                            </div>
+
+                            <!-- Contenedor para la campana, afuera del mensaje -->
+                            <div :class="['message-options', { 'message-sent': msg.sent, 'message-received': !msg.sent }]">
+                                <i 
+                                    :class="{'fas fa-bell': msg.priority !== 'urgente', 'fas fa-bell-slash': msg.priority === 'urgente'}"
+                                    @click="toggleUrgency(msg)"
+                                    class="bell-icon"></i>
+                            </div>
+
+                            <div class="status">
+                                <span :class="{'text-success': msg.status === 'visto', 'text-danger': msg.status === 'no_leido'}">
+                                    {{ msg.status === 'no_leido' ? 'No leído' : msg.status === 'visto' ? 'Visto' : msg.status === 'respondido' ? 'Respondido' : 'En espera'}}
+                                </span>
+                            </div>
                         </div>
                     </div>
                     <div class="chat-footer mt-4">
@@ -142,70 +81,159 @@ $user_id = $_SESSION['user_id'];
         </div>
     </div>
 
-<script>
-const { createApp } = Vue;
+    <script>
+    const { createApp } = Vue;
 
-createApp({
-    data() {
-        return {
-            users: [],
-            messages: [],
-            newMessage: '',
-            selectedUser: null,
-            currentUserId: <?php echo json_encode($user_id); ?>
-        };
-    },
-    mounted() {
-        this.loadUsers();
-        setInterval(() => {
-            if (this.selectedUser) this.loadMessages();
-        }, 2000);
-    },
-    methods: {
-        async loadUsers() {
-            const response = await fetch("../../chat/get_users.php");
-            this.users = await response.json();
+    createApp({
+        data() {
+            return {
+                users: [],
+                messages: [],
+                newMessage: '',
+                selectedUser: null,
+                currentUserId: <?php echo json_encode($user_id); ?>,
+            };
         },
-        async loadMessages() {
-            if (!this.selectedUser) return;
-            const response = await fetch(`../../chat/get_message.php?receiver_id=${this.selectedUser.id}`);
-            const data = await response.json();
-            // console.log(data);  // Verifica que el formato sea el esperado
-            this.messages = [...data.messages];  // Usar spread operator para forzar la actualización
+        mounted() {
+            this.loadUsers();
+            setInterval(() => {
+                if (this.selectedUser) {
+                    this.loadMessages();
+                    this.markMessagesAsRead();  // Asegúrate de que se ejecute aquí también
+                }
+            }, 2000);
         },
-        async sendMessage() {
-            if (this.newMessage.trim() !== '') {
-                let messageData = {
-                    message: this.newMessage,
-                    receiver_id: this.selectedUser.id
-                };
+        computed: {
+            masterUsers() {
+                return this.users.filter(user => user.role === 'master');
+            },
+            normalUsers() {
+                return this.users.filter(user => user.role === 'user');
+            }
+        },
+        methods: {
+            async loadUsers() {
+                const response = await fetch("../../chat/get_users.php");
+                this.users = await response.json();
+            },
+            async openChat() {
+                // Verifica si el receptor es el usuario actual
+                if (this.selectedUser.id === this.currentUserId) {
+                return; // No hacemos nada si el usuario no es el receptor
+                }
+                
+                // Cuando el receptor abre el chat, marcamos los mensajes como leídos
+                await this.markMessagesAsRead();
+            },
+            async loadMessages() {
+                if (!this.selectedUser) return;
+
+                // Cargamos los mensajes del backend
+                const response = await fetch(`../../chat/get_message.php?receiver_id=${this.selectedUser.id}`);
+                const data = await response.json();
+
+                
+                // Asignamos los mensajes a la variable messages
+                this.messages = data.messages.map(msg => ({
+                    ...msg,
+                    status: msg.status || 'en_espera', // Asignamos estado "en espera" si no tiene
+                    sent: msg.sender_id === this.currentUserId, // Si el sender_id es el mismo que el usuario logueado, es un mensaje enviado
+                    priority: msg.priority || 'normal',
+                }));
+                
+                // console.log(this.messages);
+                // Marcar los mensajes como leídos cuando se abre el chat
+                await this.markMessagesAsRead(); // Llamamos a la función para marcar los mensajes como leídos
+            },
+            async sendMessage() {
+                if (this.newMessage.trim() !== '') {
+                    let messageData = {
+                        message: this.newMessage,
+                        receiver_id: this.selectedUser.id
+                    };
+
+                    try {
+                        const response = await fetch("../../chat/chat_backend.php", {
+                            method: "POST",
+                            body: JSON.stringify(messageData),
+                            headers: { "Content-Type": "application/json" }
+                        });
+
+                        const result = await response.json();
+
+                        if (result.status === "success") {
+                            this.newMessage = ''; // Limpiar el campo de texto
+                            this.loadMessages(); // Recargar los mensajes
+                        }
+                    } catch (error) {
+                        console.error("Error enviando mensaje:", error);
+                    }
+                }
+            },
+            selectUser(user) {
+                this.selectedUser = user;
+                console.log("Usuario seleccionado:", user);
+                this.loadMessages();  // Cargar los mensajes cuando se selecciona un usuario
+            },
+            async markMessagesAsRead() {
+                try {
+
+                // Enviar una solicitud al servidor para actualizar los mensajes como leídos
+                const response = await fetch('/chat/update_message_status.php', {
+                    method: 'POST',
+                    headers: {
+                    'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                    receiver_id: this.selectedUser.id, // El receptor
+                    }),
+                });
+
+                const result = await response.json();
+                if (response.ok && result.status === 'success') {
+                    this.loadMessages(); // Recargar los mensajes
+                } else {
+                    // console.log("No se marcaron mensajes como leídos");
+                }
+                } catch (error) {
+                console.error("Error al marcar los mensajes como leídos:", error);
+                }
+            },
+            async toggleUrgency(msg) {
+                console.log(msg);
+                const newPriority = msg.priority === 'urgente' ? 'normal' : 'urgente';
+
+                if (!msg.id || !msg.priority) {
+                    console.error("Mensaje sin id o prioridad.");
+                    return;
+                }
 
                 try {
-                    const response = await fetch("../../chat/chat_backend.php", {
+                    const response = await fetch("../../chat/update_message_priority.php", {
                         method: "POST",
-                        body: JSON.stringify(messageData),
+                        body: JSON.stringify({
+                            message_id: msg.id,  // Asegúrate de que 'msg.id' existe
+                            priority: newPriority // Asegúrate de que 'newPriority' es 'urgente' o 'normal'
+                        }),
                         headers: { "Content-Type": "application/json" }
                     });
 
                     const result = await response.json();
-                    console.log("Respuesta del servidor:", result);
 
                     if (result.status === "success") {
-                        this.newMessage = ''; // Limpia el campo de texto
-                        setTimeout(() => this.loadMessages(), 200); // Espera un momento y recarga
+                        msg.priority = newPriority;  // Actualizamos localmente el mensaje
+                    } else {
+                        console.error("No se pudo actualizar la urgencia", result);
                     }
                 } catch (error) {
-                    console.error("Error enviando mensaje:", error);
+                    console.error("Error al cambiar la urgencia:", error);
                 }
             }
-        },
-        selectUser(user) {
-            this.selectedUser = user;
-            this.loadMessages();
-        }
+
     }
-}).mount("#app");
+    }).mount("#app");
 </script>
+
 
 </body>
 </html>

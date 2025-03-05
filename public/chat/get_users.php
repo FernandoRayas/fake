@@ -13,7 +13,8 @@ if (!isset($_SESSION['user_id'])) {
 $user_id = $_SESSION['user_id'];
 
 try {
-    $sql = "SELECT id, name FROM users WHERE id != ?";
+    // Ahora seleccionamos el campo 'role' además de 'id' y 'name'
+    $sql = "SELECT id, name, role FROM users WHERE id != ?";
     $stmt = $conn->prepare($sql);
 
     if (!$stmt) {
@@ -29,7 +30,8 @@ try {
     while ($row = $result->fetch_assoc()) {
         $users[] = [
             "id" => $row["id"],
-            "username" => $row["name"]  // Corregido aquí
+            "username" => $row["name"],  // Nombre del usuario
+            "role" => $row["role"]       // Rol del usuario
         ];
     }
 

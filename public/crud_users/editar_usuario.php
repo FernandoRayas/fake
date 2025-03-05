@@ -156,6 +156,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <label for="role">Rol:</label>
             <select name="role" id="role">
                 <option value="admin" <?= $user['role'] == 'admin' ? 'selected' : '' ?>>Admin</option>
+                <option value="master" <?= $user['role'] == 'master' ? 'selected' : '' ?>>Docente</option>
                 <option value="user" <?= $user['role'] == 'user' ? 'selected' : '' ?>>Usuario</option>
             </select>
         </div>
