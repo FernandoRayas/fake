@@ -45,11 +45,49 @@ options.forEach((option) => {
     if (clickedElement === options[0]) {
       loadComponent("course_home.php", clickedElement);
     } else if (clickedElement === options[1]) {
-      loadComponent("assignments.php", clickedElement);
+      loadComponent(`course_assignments.php?cid=${cid}`, clickedElement);
+      setTimeout(() => {
+        scriptAssignments();
+      }, 200);
     } else if (clickedElement === options[2]) {
-      loadComponent("kardex.php", clickedElement);
+      loadComponent("course_kardex.php", clickedElement);
     } else if (clickedElement === options[3]) {
-      loadComponent(`enrolled.php?cid=${cid}`, clickedElement);
+      loadComponent(`course_enrolled.php?cid=${cid}`, clickedElement);
+    } else if (clickedElement === options[4]) {
+      loadComponent(`course_settings.php?cid=${cid}`, clickedElement);
     }
   });
 });
+
+const scriptAssignments = () => {
+  const createAssignmentButton = document.getElementById(
+    "create-assignment-button"
+  );
+  const createAssignmentModal = document.getElementById(
+    "create-assignment-modal"
+  );
+  const inputAssignmentName = document.getElementById("assignment-name");
+  const inputAssignmentDescription = document.getElementById(
+    "assignment-description"
+  );
+  const inputAssignmentMaxScore = document.getElementById(
+    "assignment-max-score"
+  );
+  const inputAssignmentTopic = document.getElementById("assignment-topic");
+  const inputAssignmentFiles = document.getElementById("assignment-files");
+
+  const createTopicModal = document.getElementById("create-topic-modal");
+  const inputTopicName = document.getElementById("topic-name");
+  const inputTopicDescription = document.getElementById("topic-description");
+
+  const validateAssignmentData = () => {
+    if (
+      inputAssignmentName.value === "" ||
+      inputAssignmentMaxScore.value === "" ||
+      inputAssignmentTopic.options[selectedElement.selectedIndex].value ===
+        "" ||
+      inputAssignmentFiles.files.length === 0
+    ) {
+    }
+  };
+};

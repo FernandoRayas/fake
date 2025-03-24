@@ -8,7 +8,7 @@ if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] != 'admin' && $_SES
 
 include "../../modelo/conexion.php";
 
-$enrolledUsersSql = "SELECT users.name, user_courses.enrollment_role FROM users JOIN user_courses ON users.id = user_courses.user JOIN courses ON user_courses.course = courses.course_id WHERE course_id = ?";
+$enrolledUsersSql = "SELECT users.id, users.name, user_courses.enrollment_role FROM users JOIN user_courses ON users.id = user_courses.user JOIN courses ON user_courses.course = courses.course_id WHERE course_id = ?";
 $enrolledUsersStmt = $conn->prepare($enrolledUsersSql);
 $enrolledUsersStmt->bind_param('i', $_GET['cid']);
 $enrolledUsersStmt->execute();
@@ -27,7 +27,12 @@ while ($row = $enrolledUsersResult->fetch_assoc()) {
     <?php $teachersFound = false; ?>
     <?php foreach ($enrolledUsers as $row): ?>
         <?php if ($row['enrollment_role'] == 'TEACHER'): ?>
-            <li class="list-group-item"><?= $row['name'] ?></li>
+            <?php if ($row['id'] == $_SESSION['user_id']): ?>
+                <li class="list-group-item">Tu</li>
+            <?php else: ?>
+                <li class="list-group-item"><?= $row['name'] ?></li>
+            <?php endif; ?>
+
             <?php $teachersFound = true; ?>
         <?php endif; ?>
     <?php endforeach; ?>
@@ -41,7 +46,11 @@ while ($row = $enrolledUsersResult->fetch_assoc()) {
     <?php $studentsFound = false; ?>
     <?php foreach ($enrolledUsers as $row): ?>
         <?php if ($row['enrollment_role'] == 'STUDENT'): ?>
-            <li class="list-group-item"><?= $row['name'] ?></li>
+            <?php if ($row['id'] == $_SESSION['user_id']): ?>
+                <li class="list-group-item">Tu</li>
+            <?php else: ?>
+                <li class="list-group-item"><?= $row['name'] ?></li>
+            <?php endif; ?>
             <?php $studentsFound = true; ?>
         <?php endif; ?>
     <?php endforeach; ?>
