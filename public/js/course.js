@@ -5,6 +5,21 @@ const options = document.querySelectorAll(
 const urlParams = new URLSearchParams(window.location.search);
 const cid = urlParams.get("cid");
 
+const resetCourseModal = (modal) => {
+  modal.querySelectorAll("input, textarea, select").forEach((input) => {
+    input.value = "";
+    input.classList.remove("is-invalid");
+    input.querySelectorAll(".invalid-feedback").forEach((element) => {
+      element.textContent = "";
+    });
+  });
+};
+
+const closeModal = (modal) => {
+  const modalBootstrap = bootstrap.Modal.getInstance(modal);
+  modalBootstrap.hide();
+};
+
 const loadComponent = (componentName, clickedElement) => {
   options.forEach((option) => {
     option.classList.remove("active");
@@ -60,8 +75,10 @@ options.forEach((option) => {
 });
 
 const scriptAssignments = () => {
-  const createAssignmentButton = document.getElementById(
-    "create-assignment-button"
+  const alphanumericSpacesPattern = /^[a-zA-Z0-9\s:áéíóúñÁÉÍÓÚÑ\-\'\.\n]+$/;
+
+  const openAssignmentModalButton = document.getElementById(
+    "open-assignment-modal-button"
   );
   const createAssignmentModal = document.getElementById(
     "create-assignment-modal"
@@ -74,20 +91,437 @@ const scriptAssignments = () => {
     "assignment-max-score"
   );
   const inputAssignmentTopic = document.getElementById("assignment-topic");
+  const inputAssignmentSubmissionDate = document.getElementById(
+    "assignment-submission-date"
+  );
+  const inputAssignmentSubmissionTime = document.getElementById(
+    "assignment-submission-time"
+  );
   const inputAssignmentFiles = document.getElementById("assignment-files");
+  const assignmentNameFeedback = document.querySelector(
+    "#assignment-name + .invalid-feedback"
+  );
+  const assignmentDescriptionFeedback = document.querySelector(
+    "#assignment-description + .invalid-feedback"
+  );
+  const assignmentMaxScoreFeedback = document.querySelector(
+    "#assignment-max-score + .invalid-feedback"
+  );
+  const assignmentTopicFeedback = document.querySelector(
+    "#assignment-topic + .invalid-feedback"
+  );
+  const assignmentSubmissionDateFeedback = document.querySelector(
+    "#assignment-submission-date + .invalid-feedback"
+  );
+  const assignmentSubmissionTimeFeedback = document.querySelector(
+    "#assignment-submission-time + .invalid-feedback"
+  );
+  const assignmentFilesFeedback = document.querySelector(
+    "#assignment-files + .invalid-feedback"
+  );
 
+  const createAssignmentButton = document.getElementById(
+    "create-assignment-button"
+  );
+
+  const openTopicModalButton = document.getElementById(
+    "open-topic-modal-button"
+  );
   const createTopicModal = document.getElementById("create-topic-modal");
   const inputTopicName = document.getElementById("topic-name");
   const inputTopicDescription = document.getElementById("topic-description");
 
-  const validateAssignmentData = () => {
-    if (
-      inputAssignmentName.value === "" ||
-      inputAssignmentMaxScore.value === "" ||
-      inputAssignmentTopic.options[selectedElement.selectedIndex].value ===
-        "" ||
-      inputAssignmentFiles.files.length === 0
-    ) {
+  const topicNameFeedback = document.querySelector(
+    "#topic-name + .invalid-feedback"
+  );
+  const topicDescriptionFeedback = document.querySelector(
+    "#topic-description + .invalid-feedback"
+  );
+  const createTopicButton = document.getElementById("create-topic-button");
+
+  const getCurrentDate = () => {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, "0");
+    const day = String(now.getDate()).padStart(2, "0");
+
+    return `${year}-${month}-${day}`;
+  };
+
+  const getCurrentTime = () => {
+    const now = new Date();
+    const hours = String(now.getHours()).padStart(2, "0");
+    const minutes = String(now.getMinutes()).padStart(2, "0");
+
+    return `${hours}:${minutes}`;
+  };
+
+  inputAssignmentSubmissionDate.min = getCurrentDate();
+  inputAssignmentSubmissionTime.min = getCurrentTime();
+
+  const showValidation = (input, feedback, message, isValid) => {
+    if (isValid) {
+      input.classList.remove("is-invalid");
+      feedback.textContent = "";
+    } else {
+      input.classList.add("is-invalid");
+      feedback.textContent = message;
     }
   };
+
+  const validateAssignmentData = () => {
+    const fileExtesions = [
+      "pdf",
+      "docx",
+      "xlsx",
+      "csv",
+      "pptx",
+      "jpg",
+      "jpeg",
+      "png",
+      "mp3",
+      "wav",
+      "mp4",
+      "txt",
+      "rft",
+      "zip",
+    ];
+
+    if (inputAssignmentName.value.trim() === "") {
+      showValidation(
+        inputAssignmentName,
+        assignmentNameFeedback,
+        "El nombre de la tarea no puede estar vacío",
+        false
+      );
+      createAssignmentButton.disabled = true;
+      return false;
+    } else {
+      showValidation(inputAssignmentName, assignmentNameFeedback, "", true);
+    }
+
+    if (!alphanumericSpacesPattern.test(inputAssignmentName.value.trim())) {
+      showValidation(
+        inputAssignmentName,
+        assignmentNameFeedback,
+        "El nombre debe contener letras, números o espacios",
+        false
+      );
+      createAssignmentButton.disabled = true;
+      return false;
+    } else {
+      showValidation(inputAssignmentName, assignmentNameFeedback, "", true);
+    }
+
+    if (
+      inputAssignmentDescription.value.trim() !== "" &&
+      !alphanumericSpacesPattern.test(inputAssignmentDescription.value.trim())
+    ) {
+      showValidation(
+        inputAssignmentDescription,
+        assignmentDescriptionFeedback,
+        "La descripción debe contener letras, números o espacios",
+        false
+      );
+      createAssignmentButton.disabled = true;
+      return false;
+    } else {
+      showValidation(
+        inputAssignmentDescription,
+        assignmentDescriptionFeedback,
+        "",
+        true
+      );
+    }
+
+    if (
+      inputAssignmentMaxScore.value.trim() === "" ||
+      isNaN(inputAssignmentMaxScore.value) ||
+      parseFloat(inputAssignmentMaxScore.value) <= 0
+    ) {
+      showValidation(
+        inputAssignmentMaxScore,
+        assignmentMaxScoreFeedback,
+        "La puntuación máxima debe ser mayor a 0",
+        false
+      );
+      createAssignmentButton.disabled = true;
+      return false;
+    } else {
+      showValidation(
+        inputAssignmentMaxScore,
+        assignmentMaxScoreFeedback,
+        "",
+        true
+      );
+    }
+
+    if (parseFloat(inputAssignmentMaxScore.value) > 100) {
+      showValidation(
+        inputAssignmentMaxScore,
+        assignmentMaxScoreFeedback,
+        "La puntuación máxima no puede ser mayor a 100",
+        false
+      );
+      createAssignmentButton.disabled = true;
+      return false;
+    } else {
+      showValidation(
+        inputAssignmentMaxScore,
+        assignmentMaxScoreFeedback,
+        "",
+        true
+      );
+    }
+
+    if (
+      inputAssignmentTopic.options[inputAssignmentTopic.selectedIndex].value ===
+      ""
+    ) {
+      showValidation(
+        inputAssignmentTopic,
+        assignmentTopicFeedback,
+        "Selecciona el tema de la tarea",
+        false
+      );
+      createAssignmentButton.disabled = true;
+      return false;
+    } else {
+      showValidation(inputAssignmentTopic, assignmentTopicFeedback, "", true);
+    }
+
+    if (
+      inputAssignmentSubmissionDate.value === "" ||
+      inputAssignmentSubmissionDate.value < getCurrentDate()
+    ) {
+      showValidation(
+        inputAssignmentSubmissionDate,
+        assignmentSubmissionDateFeedback,
+        "Selecciona una fecha válida",
+        false
+      );
+      createAssignmentButton.disabled = true;
+      return false;
+    } else {
+      showValidation(
+        inputAssignmentSubmissionDate,
+        assignmentSubmissionDateFeedback,
+        "",
+        true
+      );
+    }
+
+    if (
+      inputAssignmentSubmissionTime.value !== "" &&
+      inputAssignmentSubmissionTime.value < getCurrentTime()
+    ) {
+      showValidation(
+        inputAssignmentSubmissionTime,
+        assignmentSubmissionTimeFeedback,
+        "Selecciona una hora válida",
+        false
+      );
+      createAssignmentButton.disabled = true;
+      return false;
+    } else {
+      showValidation(
+        inputAssignmentSubmissionTime,
+        assignmentSubmissionTimeFeedback,
+        "",
+        true
+      );
+    }
+
+    if (inputAssignmentFiles.files.length > 0) {
+      let invalidFiles = [];
+      for (
+        let fileIndex = 0;
+        fileIndex < inputAssignmentFiles.files.length;
+        fileIndex++
+      ) {
+        const file = inputAssignmentFiles.files[fileIndex];
+        console.log(file);
+        const fileExtension = file.name.split(".").pop().toLowerCase();
+        if (fileExtesions.indexOf(fileExtension) === -1) {
+          invalidFiles.push(file.name);
+        }
+      }
+
+      if (invalidFiles.length > 0) {
+        const message = `Los siguientes archivos no son válidos: ${invalidFiles.join(
+          ", "
+        )}`;
+
+        showValidation(
+          inputAssignmentFiles,
+          assignmentFilesFeedback,
+          message,
+          false
+        );
+        createAssignmentButton.disabled = true;
+        return false;
+      } else {
+        showValidation(inputAssignmentFiles, assignmentFilesFeedback, "", true);
+      }
+
+      return false;
+    } else {
+      showValidation(inputAssignmentFiles, assignmentFilesFeedback, "", true);
+      createAssignmentButton.disabled = false;
+    }
+  };
+
+  const validateTopicData = () => {
+    if (inputTopicName.value.trim() === "") {
+      showValidation(
+        inputTopicName,
+        topicNameFeedback,
+        "El nombre del Tema no puede estar vacío",
+        false
+      );
+      createTopicButton.disabled = true;
+      return false;
+    } else {
+      showValidation(inputTopicName, topicNameFeedback, "", true);
+      createTopicButton.disabled = false;
+    }
+
+    if (!alphanumericSpacesPattern.test(inputTopicName.value.trim())) {
+      showValidation(
+        inputTopicName,
+        topicNameFeedback,
+        "El nombre del Tema solo puede contener letras, números o espacios",
+        false
+      );
+      createTopicButton.disabled = true;
+      return false;
+    } else {
+      showValidation(inputTopicName, topicNameFeedback, "", true);
+      createTopicButton.disabled = false;
+    }
+
+    if (inputTopicName.value.trim().length < 3) {
+      showValidation(
+        inputTopicName,
+        topicNameFeedback,
+        "El nombre del Tema debe ser mayor a 3 caracteres",
+        false
+      );
+      createTopicButton.disabled = true;
+      return false;
+    } else {
+      showValidation(inputTopicName, topicNameFeedback, "", true);
+      createTopicButton.disabled = false;
+    }
+
+    if (inputTopicName.value.trim().length > 100) {
+      showValidation(
+        inputTopicName,
+        topicNameFeedback,
+        "El nombre del Tema no puede ser mayor a 100 caracteres",
+        false
+      );
+      createTopicButton.disabled = true;
+      return false;
+    } else {
+      showValidation(inputTopicName, topicNameFeedback, "", true);
+      createTopicButton.disabled = false;
+    }
+
+    if (
+      inputTopicDescription.value.trim() !== "" &&
+      !alphanumericSpacesPattern.test(inputTopicDescription.value.trim())
+    ) {
+      showValidation(
+        inputTopicDescription,
+        topicDescriptionFeedback,
+        "Solo se permiten letras, números o espacios",
+        false
+      );
+      createTopicButton.disabled = true;
+      return false;
+    } else {
+      showValidation(inputTopicDescription, topicDescriptionFeedback, "", true);
+      createTopicButton.disabled = false;
+    }
+  };
+
+  const createAssignment = (data) => {
+    fetch("../assignments/create_assignment.php", {
+      body: JSON.stringify(data),
+      method: "POST",
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Error al crear la tarea");
+        }
+
+        return response.json();
+      })
+      .then((data) => {
+        console.log(data);
+      })
+      .catch((error) => {
+        throw new Error(`Error al crear la tarea: ${error.message}`);
+      });
+  };
+
+  inputAssignmentName.addEventListener("blur", () => {
+    validateAssignmentData();
+  });
+
+  inputAssignmentDescription.addEventListener("blur", () => {
+    validateAssignmentData();
+  });
+
+  inputAssignmentMaxScore.addEventListener("blur", () => {
+    validateAssignmentData();
+  });
+
+  inputAssignmentTopic.addEventListener("change", () => {
+    validateAssignmentData();
+  });
+
+  inputAssignmentSubmissionDate.addEventListener("change", () => {
+    validateAssignmentData();
+  });
+
+  inputAssignmentSubmissionTime.addEventListener("change", () => {
+    validateAssignmentData();
+  });
+
+  inputAssignmentFiles.addEventListener("change", () => {
+    validateAssignmentData();
+  });
+
+  inputTopicName.addEventListener("blur", () => {
+    validateTopicData();
+  });
+
+  inputTopicDescription.addEventListener("blur", () => {
+    validateTopicData();
+  });
+
+  createAssignmentModal.addEventListener("hidden.bs.modal", () => {
+    resetCourseModal(createAssignmentModal);
+  });
+
+  createTopicModal.addEventListener("hidden.bs.modal", () => {
+    resetCourseModal(createTopicModal);
+  });
+
+  createAssignmentButton.addEventListener("click", () => {
+    const data = {
+      assignmentName: inputAssignmentName.value,
+      assignmentDescription: inputAssignmentDescription.value,
+      assignmentMaxScore: inputAssignmentMaxScore.value,
+      assignmentSubmissionDate: inputAssignmentSubmissionDate.value,
+      assignmentSubmissionTime: inputAssignmentSubmissionTime.value,
+      topic: inputAssignmentTopic.value,
+    };
+
+    createAssignment(data);
+
+    closeModal(createAssignmentModal);
+  });
 };
