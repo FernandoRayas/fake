@@ -180,55 +180,58 @@ foreach ($assignments as $assignment) {
 </div>
 <?php foreach ($topics as $row): ?>
     <h4 class="mt-4 border-bottom border-1"><?= $row['topic_name'] ?></h4>
-    <div class="accordion accordion-flush" id="assignments-accordion<?= $row['topic_id'] ?>">
-        <?php foreach ($assignments as $assignment): ?>
-            <?php
-            $assignmentDate = new DateTime(($assignment['submission_date']));
-            $assignmentDateString = $assignmentDate->format('d/m/Y');
-            $assignmentTime = new DateTime($assignment['submission_time']);
-            $assignmentTimeString = $assignmentTime->format('H:i');
-            ?>
-            <?php if ($assignment['topic'] == $row['topic_id']): ?>
-                <div class="accordion-item">
-                    <h2 class="accordion-header" id="heading<?= $assignment['assignment_id'] ?>">
-                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse<?= $assignment['assignment_id'] ?>" aria-expanded="false" aria-controls="collapse<?= $assignment['assignment_id'] ?>">
-                            <div class="d-flex align-items-center justify-content-between w-100">
-                                <span><?= $assignment['assignment_name'] ?></span>
-                                <span class="text-secondary me-2">
-                                    Fecha de Entrega:
-                                    <?php if ($assignmentDateString == $currentDateString): ?>
-                                        <?php echo "Hoy, $assignmentTimeString" ?>
-                                    <?php else: ?>
-                                        <?php echo "$assignmentDateString, $assignmentTimeString" ?>
-                                    <?php endif; ?>
-                                </span>
-                            </div>
-                        </button>
-                    </h2>
-                    <div id="collapse<?= $assignment['assignment_id'] ?>" class="accordion-collapse collapse" aria-labelledby="heading<?= $assignment['assignment_id'] ?>" data-bs-parent="#assignments-accordion<?= $row['topic_id'] ?>">
-                        <div class="accordion-body">
-                            <?php if ($assignment['assignment_description'] == ""): ?>
-                                <p>No se proporciono una descripción de la tarea</p>
-                            <?php else: ?>
-                                <p><?= $assignment['assignment_description'] ?></p>
-                            <?php endif; ?>
-                            <div class="row">
-                                <?php foreach ($files as $file): ?>
-                                    <?php if ($file['assignment'] == $assignment['assignment_id']): ?>
-                                        <div class="col-12 col-sm-12 col-md-6">
-                                            <a class="text-secondary link-secondary link-underline link-underline-opacity-0 link-underline-opacity-100-hover" href="<?= htmlspecialchars("../files/" . $file['file_path']) ?>" target="_blank"><?= $file['file_name']  ?></a>
-                                        </div>
-                                    <?php endif; ?>
-                                <?php endforeach; ?>
-                            </div>
-                            <div class="container">
-                                <a class="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover" href="assignment.php?aid=<?= $assignment['assignment_id'] ?>&cid=<?php echo $_GET['cid'] ?>">Ver detalles de la asignación</a>
+    <?php if (count($assignments) > 0): ?>
+        <div class="accordion accordion-flush" id="assignments-accordion<?= $row['topic_id'] ?>">
+            <?php foreach ($assignments as $assignment): ?>
+                <?php
+                $assignmentDate = new DateTime(($assignment['submission_date']));
+                $assignmentDateString = $assignmentDate->format('d/m/Y');
+                $assignmentTime = new DateTime($assignment['submission_time']);
+                $assignmentTimeString = $assignmentTime->format('H:i');
+                ?>
+                <?php if ($assignment['topic'] == $row['topic_id']): ?>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="heading<?= $assignment['assignment_id'] ?>">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse<?= $assignment['assignment_id'] ?>" aria-expanded="false" aria-controls="collapse<?= $assignment['assignment_id'] ?>">
+                                <div class="d-flex align-items-center justify-content-between w-100">
+                                    <span><?= $assignment['assignment_name'] ?></span>
+                                    <span class="text-secondary me-2">
+                                        <?php if ($assignmentDateString == $currentDateString): ?>
+                                            <?php echo "Hoy, $assignmentTimeString" ?>
+                                        <?php else: ?>
+                                            <?php echo "$assignmentDateString, $assignmentTimeString" ?>
+                                        <?php endif; ?>
+                                    </span>
+                                </div>
+                            </button>
+                        </h2>
+                        <div id="collapse<?= $assignment['assignment_id'] ?>" class="accordion-collapse collapse" aria-labelledby="heading<?= $assignment['assignment_id'] ?>" data-bs-parent="#assignments-accordion<?= $row['topic_id'] ?>">
+                            <div class="accordion-body">
+                                <?php if ($assignment['assignment_description'] == ""): ?>
+                                    <p>No se proporciono una descripción de la tarea</p>
+                                <?php else: ?>
+                                    <p><?= $assignment['assignment_description'] ?></p>
+                                <?php endif; ?>
+                                <div class="row">
+                                    <?php foreach ($files as $file): ?>
+                                        <?php if ($file['assignment'] == $assignment['assignment_id']): ?>
+                                            <div class="col-12 col-sm-12 col-md-6">
+                                                <a class="text-secondary link-secondary link-underline link-underline-opacity-0 link-underline-opacity-100-hover" href="<?= htmlspecialchars("../files/" . $file['file_path']) ?>" target="_blank"><?= $file['file_name']  ?></a>
+                                            </div>
+                                        <?php endif; ?>
+                                    <?php endforeach; ?>
+                                </div>
+                                <div class="container">
+                                    <a class="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover" href="assignment.php?aid=<?= $assignment['assignment_id'] ?>&cid=<?php echo $_GET['cid'] ?>">Ver detalles de la asignación</a>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
 
-            <?php endif; ?>
-        <?php endforeach; ?>
-    </div>
+                <?php endif; ?>
+            <?php endforeach; ?>
+        </div>
+    <?php else: ?>
+        <h5>Aún no hay tareas</h5>
+    <?php endif; ?>
 <?php endforeach; ?>

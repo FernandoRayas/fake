@@ -14,9 +14,10 @@ if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] != 'admin' && $_SES
 include "../modelo/conexion.php";
 
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
-    $sql = "SELECT courses.* FROM courses JOIN user_courses ON courses.course_id = user_courses.course WHERE user_courses.user = ?";
+    $searchTerm = '%' . $_GET['cname'] . '%';
+    $sql = "SELECT courses.* FROM courses JOIN user_courses ON courses.course_id = user_courses.course WHERE user_courses.user = ? AND course_name LIKE ?";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("i", $_SESSION['user_id']);
+    $stmt->bind_param("is", $_SESSION['user_id'], $searchTerm);
     $stmt->execute();
     $result = $stmt->get_result();
 

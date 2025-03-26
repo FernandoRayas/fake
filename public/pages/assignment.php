@@ -47,7 +47,7 @@ if ($_SESSION['user_role'] == "master" || $_SESSION['user_role'] == "admin") {
     $submittedAssignmentsSql = "SELECT users.name, users.id, file_name, file_path, submitted_at, status, score, student, max_score FROM users 
     JOIN submissions_assignments_files ON users.id = submissions_assignments_files.student 
     JOIN assignments ON assignments.assignment_id = submissions_assignments_files.assignment 
-    JOIN files ON files.file_id = submissions_assignments_files.file WHERE assignment = ?";
+    JOIN files ON files.file_id = submissions_assignments_files.file WHERE assignment = ? AND status != 'SCORED'";
 
     $submittedAssignmentsStmt = $conn->prepare($submittedAssignmentsSql);
     $submittedAssignmentsStmt->bind_param('i', $_GET['aid']);
@@ -181,7 +181,7 @@ if ($_SESSION['user_role'] == "master" || $_SESSION['user_role'] == "admin") {
                                 </span>
                             <?php else: ?>
                                 <span class="text-secondary">
-                                    <?php echo ($submission['score'] == -1) ? '-' : $submission['score']; ?>/<?php echo $assignment['max_score'] ?>
+                                    -/<?php echo $assignment['max_score'] ?>
                                 </span>
                                 <?php echo "$assignmentDateString, $assignmentTimeString" ?>
                             <?php endif; ?>
@@ -252,13 +252,15 @@ if ($_SESSION['user_role'] == "master" || $_SESSION['user_role'] == "admin") {
             <?php if (count($files) > 0): ?>
                 <h3>Archivos Adjuntos a la Tarea</h3>
                 <div class="border-bottom border-1 mb-3"></div>
-                <?php foreach ($files as $file): ?>
-                    <?php if ($file['assignment'] == $assignment['assignment_id']): ?>
-                        <div class="mb-4">
-                            <a class="text-secondary link-secondary link-underline link-underline-opacity-0 link-underline-opacity-100-hover" href="<?= htmlspecialchars("../files/" . $file['file_path']) ?>" target="_blank"><?= $file['file_name']  ?></a>
-                        </div>
-                    <?php endif; ?>
-                <?php endforeach; ?>
+                <div class="row">
+                    <?php foreach ($files as $file): ?>
+                        <?php if ($file['assignment'] == $assignment['assignment_id']): ?>
+                            <div class="mb-4 text-truncate">
+                                <a class="text-secondary link-secondary link-underline link-underline-opacity-0 link-underline-opacity-100-hover" href="<?= htmlspecialchars("../files/" . $file['file_path']) ?>" target="_blank"><?= $file['file_name']  ?></a>
+                            </div>
+                        <?php endif; ?>
+                    <?php endforeach; ?>
+                </div>
             <?php endif; ?>
 
             <?php if (count($submissions) > 0): ?>
@@ -330,7 +332,7 @@ if ($_SESSION['user_role'] == "master" || $_SESSION['user_role'] == "admin") {
                     </table>
                 </div>
             <?php else: ?>
-                <h3>Aún no hay entregas</h3>
+                <h3>Aún no hay entregas pendientes de calificar</h3>
                 <div class="border-bottom border-1"></div>
             <?php endif; ?>
         </div>

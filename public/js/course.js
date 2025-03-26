@@ -517,7 +517,7 @@ const scriptAssignments = () => {
           formData.append("assignment-files[]", files[i]);
         }
 
-        fetch(`../files/create_assignment_file.php?aid=${aid}`, {
+        fetch(`../files/create_assignment_file.php`, {
           method: "POST",
           body: formData,
         })

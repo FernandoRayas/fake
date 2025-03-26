@@ -21,12 +21,13 @@ if ($_SESSION['user_role'] == "user") {
         submissions_assignments_files saf
     JOIN
         assignments a ON saf.assignment = a.assignment_id
+    JOIN topics t ON a.topic = t.topic_id
     WHERE
-        saf.student = ?
+        saf.student = ? AND t.course = ?
     GROUP BY
         a.assignment_name, a.max_score;";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param('i', $_SESSION['user_id']);
+    $stmt->bind_param('ii', $_SESSION['user_id'], $_GET['cid']);
     $stmt->execute();
     $result = $stmt->get_result();
     while ($row = $result->fetch_assoc()) {
@@ -76,49 +77,93 @@ if ($_SESSION['user_role'] == "user") {
     <div class="py-2">
         <h2>Calificaciones por tarea</h2>
         <div class="border-bottom border-1 mb-2"></div>
-        <ul class="list-group list-group-flush">
-            <?php foreach ($grades as $grade): ?>
-                <li class="list-group-item">
-                    <div class="d-flex align-items-center justify-content-between">
-                        <span><?= $grade['assignment_name'] ?></span>
-                        <?php if ($grade['score'] == -1): ?>
-                            <span>-/<?= $grade['max_score'] ?></span>
-                        <?php else: ?>
-                            <span><?= $grade['score'] ?>/<?= $grade['max_score'] ?></span>
-                        <?php endif; ?>
-                        <span><?= $grade['submitted_at'] ?></span>
-                    </div>
-                </li>
-            <?php endforeach; ?>
-        </ul>
+        <?php if (count($grades) > 0): ?>
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Tarea</th>
+                            <th scope="col">Estudiante</th>
+                            <th scope="col">Calificación</th>
+                            <th scope="col">Entregado el</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($grades as $grade): ?>
+                            <tr>
+                                <td><strong><?= $grade['assignment_name'] ?></strong></td>
+
+                                <td><?php echo ($grade['score'] == -1) ?  "-" : $grade['score'] ?> / <?= $grade['max_score'] ?></td>
+                                <?php if ($grade['status'] == 'SCORED'): ?>
+                                    <td class="text-success"><?= "Calificado" ?></td>
+                                <?php elseif ($grade['status'] == 'SUBMITTED'): ?>
+                                    <td><?= "Entregado" ?></td>
+                                <?php elseif ($grade['status'] == 'SUBMITTED_LATE'): ?>
+                                    <td><?= "Entregado Tarde" ?></td>
+                                <?php endif; ?>
+                                <td><?= $grade['submitted_at'] ?></td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+        <?php else: ?>
+            <h5>Aun no hay entregas</h5>
+        <?php endif; ?>
     </div>
 <?php elseif ($_SESSION['user_role'] == "master"): ?>
     <div class="py-2">
         <h2>Calificaciones por Estudiante</h2>
-        <div class="border-bottom border-1"></div>
-        <div class="accordion" id="studentsAccordion">
-            <?php $accordionIndex = 1;
-            foreach ($students as $studentName => $studentGrades): ?>
-                <div class="accordion-item">
-                    <h2 class="accordion-header" id="heading<?= $accordionIndex ?>">
-                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse<?= $accordionIndex ?>" aria-expanded="true" aria-controls="collapse<?= $accordionIndex ?>">
-                            <?= $studentName ?>
-                        </button>
-                    </h2>
-                    <div id="collapse<?= $accordionIndex ?>" class="accordion-collapse collapse" aria-labelledby="heading<?= $accordionIndex ?>" data-bs-parent="#studentsAccordion">
-                        <div class="accordion-body">
-                            <ul class="list-group">
-                                <?php foreach ($studentGrades as $grade): ?>
-                                    <li class="list-group-item">
-                                        <?= $grade['assignment_name'] ?> - Calificación: <?= $grade['score'] ?> / <?= $grade['max_score'] ?> - Estado: <?= $grade['status'] ?> - Fecha: <?= $grade['submitted_at'] ?>
-                                    </li>
-                                <?php endforeach; ?>
-                            </ul>
+        <div class="border-bottom border-1 mb-2"></div>
+        <?php if (count($students) > 0): ?>
+            <div class="accordion accordion-flush" id="studentsAccordion">
+                <?php $accordionIndex = 1;
+                foreach ($students as $studentName => $studentGrades): ?>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="heading<?= $accordionIndex ?>">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse<?= $accordionIndex ?>" aria-expanded="false" aria-controls="collapse<?= $accordionIndex ?>">
+                                <?= $studentName ?>
+                            </button>
+                        </h2>
+                        <div id="collapse<?= $accordionIndex ?>" class="accordion-collapse collapse" aria-labelledby="heading<?= $accordionIndex ?>" data-bs-parent="#studentsAccordion">
+                            <div class="accordion-body">
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">Tarea</th>
+                                                <th scope="col">Estudiante</th>
+                                                <th scope="col">Calificación</th>
+                                                <th scope="col">Entregado el</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <?php foreach ($studentGrades as $grade): ?>
+                                                <tr>
+                                                    <td><?= $grade['assignment_name'] ?></td>
+
+                                                    <td><?php echo ($grade['score'] == -1) ?  "-" : $grade['score'] ?> / <?= $grade['max_score'] ?></td>
+                                                    <?php if ($grade['status'] == 'SCORED'): ?>
+                                                        <td><?= "Calificado" ?></td>
+                                                    <?php elseif ($grade['status'] == 'SUBMITTED'): ?>
+                                                        <td><?= "Entregado" ?></td>
+                                                    <?php elseif ($grade['status'] == 'SUBMITTED_LATE'): ?>
+                                                        <td><?= "Entregado Tarde" ?></td>
+                                                    <?php endif; ?>
+                                                    <td><?= $grade['submitted_at'] ?></td>
+                                                </tr>
+                                            <?php endforeach; ?>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-            <?php $accordionIndex++;
-            endforeach; ?>
-        </div>
+                <?php $accordionIndex++;
+                endforeach; ?>
+            </div>
+        <?php else: ?>
+            <h5>Aún no hay envíos</h5>
+        <?php endif; ?>
     </div>
 <?php endif; ?>

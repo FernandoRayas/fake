@@ -1,6 +1,7 @@
 const modal = document.getElementById("create-course-modal");
 const enrollModal = document.getElementById("enroll-course-modal");
 const alertElement = document.getElementById("alert");
+const inputFindCourse = document.getElementById("find-course");
 
 const displayAlert = (message, type) => {
   const alertMessage = document.getElementById("alert-message");
@@ -133,7 +134,7 @@ if (modal !== null) {
 
     coursesContainer.innerHTML = "";
 
-    fetch("../courses/get_courses.php")
+    fetch("../courses/get_enrolled_courses.php")
       .then((response) => {
         if (!response.ok) {
           throw new Error(`Error al obtener los cursos`);
@@ -191,6 +192,45 @@ if (modal !== null) {
   inputCourseDescription.addEventListener("input", () => {
     validateCourseData();
   });
+
+  inputFindCourse.addEventListener("blur", () => {
+    const coursesContainer = document.querySelector(".courses-container");
+    coursesContainer.innerHTML = "";
+
+    const courseName = inputFindCourse.value;
+
+    fetch(`../courses/find_courses.php?cname=${courseName}`)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Error al encontrar los cursos");
+        }
+
+        return response.json();
+      })
+      .then((data) => {
+        if (data) {
+          data.courses.forEach((course) => {
+            coursesContainer.innerHTML += `
+            <div class="col">
+              <div class="card mb-3" style="width: 18rem;">
+                <div class="card-body">
+                  <h5 class="card-title row">
+                    <a href="course.php?cid=${course.course_id}" class="link-secondary link-underline-secondary link-underline-opacity-0 link-underline-opacity-100-hover text-truncate">
+                      ${course.course_name}
+                    </a>
+                  </h5>
+                  <p class="card-text">${course.course_description}</p>
+                </div>
+                <div class="card-footer"></div>
+              </div>
+            </div>`;
+          });
+        }
+      })
+      .catch((error) => {
+        throw new Error("Error al encontrar los cursos: " + error.message);
+      });
+  });
 } else {
   const inputCourseCode = document.getElementById("course-code");
   const enrollCourseButton = document.getElementById("enroll-course-btn");
@@ -232,7 +272,41 @@ if (modal !== null) {
     courseCodeFeedback.textContent = "";
   };
 
-  const reloadCourses = () => {};
+  const reloadCourses = () => {
+    const coursesContainer = document.querySelector(".courses-container");
+
+    coursesContainer.innerHTML = "";
+
+    fetch("../courses/get_enrolled_courses.php")
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`Error al obtener los cursos`);
+        }
+
+        return response.json();
+      })
+      .then((data) => {
+        data.courses.forEach((course) => {
+          coursesContainer.innerHTML += `
+          <div class="col">
+            <div class="card mb-3" style="width: 18rem;">
+              <div class="card-body">
+                <h5 class="card-title row">
+                  <a href="course.php?cid=${course.course_id}" class="link-secondary link-underline-secondary link-underline-opacity-0 link-underline-opacity-100-hover text-truncate">
+                    ${course.course_name}
+                  </a>
+                </h5>
+                <p class="card-text">${course.course_description}</p>
+              </div>
+              <div class="card-footer"></div>
+            </div>
+          </div>`;
+        });
+      })
+      .catch((error) => {
+        throw new Error(`Error al obtener los cursos: ${error.message}`);
+      });
+  };
 
   const enrollCourse = (data) => {
     fetch("../courses/enroll_course.php", {
@@ -259,9 +333,9 @@ if (modal !== null) {
 
     enrollCourse(data);
 
-    // setTimeout(() => {
-    //   reloadCourses();
-    // }, 100);
+    setTimeout(() => {
+      reloadCourses();
+    }, 100);
 
     const modalBootstrap = bootstrap.Modal.getInstance(enrollModal);
     modalBootstrap.hide();
@@ -273,5 +347,44 @@ if (modal !== null) {
 
   inputCourseCode.addEventListener("input", () => {
     validateCourseCode();
+  });
+
+  inputFindCourse.addEventListener("blur", () => {
+    const coursesContainer = document.querySelector(".courses-container");
+    coursesContainer.innerHTML = "";
+
+    const courseName = inputFindCourse.value;
+
+    fetch(`../courses/find_enrolled_courses.php?cname=${courseName}`)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Error al encontrar los cursos");
+        }
+
+        return response.json();
+      })
+      .then((data) => {
+        if (data) {
+          data.courses.forEach((course) => {
+            coursesContainer.innerHTML += `
+            <div class="col">
+              <div class="card mb-3" style="width: 18rem;">
+                <div class="card-body">
+                  <h5 class="card-title row">
+                    <a href="course.php?cid=${course.course_id}" class="link-secondary link-underline-secondary link-underline-opacity-0 link-underline-opacity-100-hover text-truncate">
+                      ${course.course_name}
+                    </a>
+                  </h5>
+                  <p class="card-text">${course.course_description}</p>
+                </div>
+                <div class="card-footer"></div>
+              </div>
+            </div>`;
+          });
+        }
+      })
+      .catch((error) => {
+        throw new Error("Error al encontrar los cursos: " + error.message);
+      });
   });
 }

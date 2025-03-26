@@ -153,9 +153,13 @@ const createSubmission = () => {
         } else if (data.response.isAlreadySubmitted) {
           showAlert("Ya has entregado la tarea", "warning");
         }
+        inputSubmissionFile.disabled = true;
+        submitButton.disabled = true;
       })
       .catch((error) => {
         showAlert(`Error al agregar el archivo: ${error.message}`, "danger");
+        inputSubmissionFile.disabled = false;
+        submitButton.disabled = false;
         throw new Error(`Error al agregar el archivo: ${error.message}`);
       });
   }
