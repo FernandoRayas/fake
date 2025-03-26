@@ -59,6 +59,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['assignment-files'])) 
                 $createFileStmt->bind_param('ssis', $fileName, $path, $fileSize, $fileExtension);
                 if ($createFileStmt->execute()) {
                     $createFileStmt->close();
+
+                    $getLastAssignmentIdQuery = $conn->query("SELECT MAX(assignment_id) as last_id FROM assignments");
+                    $lastAssignmentId = $getLastAssignmentIdQuery->fetch_assoc()['last_id'];
+
+                    $getLastFileIdQuery = $conn->query("SELECT MAX(file_id) as file_id FROM files");
+                    $lastFileId = $getLastFileIdQuery->fetch_assoc()['file_id'];
+
+                    $linkAssignmentFileSql = "INSERT INTO assignments_files VALUES (?,?)";
+                    $linkAssignmentFileStmt = $conn->prepare($linkAssignmentFileSql);
+                    $linkAssignmentFileStmt->bind_param('ii', $lastAssignmentId, $lastFileId);
+                    if ($linkAssignmentFileStmt->execute()) {
+                    } else {
+                        $errors[] = "Error al enlazar el archivo " . $fileName . " con la tarea " . $lastAssignmentId;
+                        return false;
+                    }
                 } else {
                     $errors[] = "Error al insertar " . $fileName . " en la base de datos";
                     $areFilesUplodaded = false;
