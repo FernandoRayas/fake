@@ -8,6 +8,10 @@ if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] != 'admin' && $_SES
 
 include "../../modelo/conexion.php";
 
+$timezone = new DateTimeZone('America/Monterrey');
+$currentDate = new DateTime('now', $timezone);
+$currentDateString = $currentDate->format('d/m/Y');
+
 $topicSql = "SELECT topics.topic_id, topics.topic_name, topics.topic_description FROM topics WHERE course = ?";
 $topicStmt = $conn->prepare($topicSql);
 $topicStmt->bind_param('i', $_GET['cid']);
@@ -29,8 +33,8 @@ while ($row = $assignmentResult->fetch_assoc()) {
 }
 ?>
 
-<div class="row d-flex align-items-center my-2">
-    <h3 class="col-9 col-sm-8 col-md-8 col-lg-9 col-xl-10 col-xxl-10">Trabajo de Curso</h3>
+<div class="row d-flex align-items-center my-2 border rounded py-2">
+    <h2 class="col-9 col-sm-8 col-md-8 col-lg-9 col-xl-10 col-xxl-10">Trabajo de Curso</h2>
     <?php if ($_SESSION['user_role'] == 'master'): ?>
         <div id="dropdown" class="dropdown col-3 col-sm-4 col-md-4 col-lg-3 col-xl-2 col-xxl-2">
             <button class="btn btn-secondary dropdown-toggle d-flex align-items-center" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -69,7 +73,7 @@ while ($row = $assignmentResult->fetch_assoc()) {
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <form class="needs-validation" action="../assignments/create_assignment.php" method="post" novalidate>
+                        <form class="needs-validation" action="../assignments/create_assignment.php" method="post" enctype="multipart/form-data" novalidate>
                             <div class="mb-3">
                                 <label for="assignment-name" class="form-label">Titulo de la Tarea *:</label>
                                 <input type="text" class="form-control" id="assignment-name" required>
@@ -109,7 +113,7 @@ while ($row = $assignmentResult->fetch_assoc()) {
                             </div>
                             <div class="mb-3">
                                 <label for="assignment-files" class="form-label">Adjuntar archivos:</label>
-                                <input class="form-control" type="file" id="assignment-files" accept=".docx,.pdf,.xlsx,.csv,.pptx,.jpg,.jpeg,.png,.mp3,.wav,.mp4,.txt,.rft,.zip" multiple>
+                                <input class="form-control" name="assignment-files" type="file" id="assignment-files" accept=".docx,.pdf,.xlsx,.csv,.pptx,.jpg,.jpeg,.png,.mp3,.wav,.mp4,.txt,.rft,.zip" multiple>
                                 <div class="invalid-feedback"></div>
                             </div>
                         </form>
@@ -157,13 +161,44 @@ while ($row = $assignmentResult->fetch_assoc()) {
         </div>
     <?php endif; ?>
 </div>
-<div class="container border-top border-1"></div>
 <?php foreach ($topics as $row): ?>
-    <h4 class="mt-3"><?= $row['topic_name'] ?></h4>
-    <div class="border-top border-1"></div>
-    <?php foreach ($assignments as $assignment): ?>
-        <h5>
-            <a href="assignment.php?aid=<?= $assignment['assignment_id'] ?>"><?= $assignment['assignment_name'] ?></a>
-        </h5>
-    <?php endforeach; ?>
+    <h4 class="mt-4 border-bottom border-1"><?= $row['topic_name'] ?></h4>
+    <div class="accordion accordion-flush" id="assignments-accordion<?= $row['topic_id'] ?>">
+        <?php foreach ($assignments as $assignment): ?>
+            <?php
+            $assignmentDate = new DateTime(($assignment['submission_date']));
+            $assignmentDateString = $assignmentDate->format('d/m/Y');
+            $assignmentTime = new DateTime($assignment['submission_time']);
+            $assignmentTimeString = $assignmentTime->format('H:i');
+            ?>
+            <?php if ($assignment['topic'] == $row['topic_id']): ?>
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="heading<?= $assignment['assignment_id'] ?>">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse<?= $assignment['assignment_id'] ?>" aria-expanded="false" aria-controls="collapse<?= $assignment['assignment_id'] ?>">
+                            <div class="d-flex align-items-center justify-content-between w-100">
+                                <span><?= $assignment['assignment_name'] ?></span>
+                                <span class="text-secondary me-2">
+                                    Fecha de Entrega:
+                                    <?php if ($assignmentDateString == $currentDateString): ?>
+                                        <?php echo "Hoy, $assignmentTimeString" ?>
+                                    <?php else: ?>
+                                        <?php echo "$assignmentDateString, $assignmentTimeString" ?>
+                                    <?php endif; ?>
+                                </span>
+                            </div>
+                        </button>
+                    </h2>
+                    <div id="collapse<?= $assignment['assignment_id'] ?>" class="accordion-collapse collapse" aria-labelledby="heading<?= $assignment['assignment_id'] ?>" data-bs-parent="#assignments-accordion<?= $row['topic_id'] ?>">
+                        <div class="accordion-body">
+                            <p><?= $assignment['assignment_description'] ?></p>
+                            <div class="container">
+                                <a href="assignment.php?aid=<?= $assignment['assignment_id'] ?>&cid=<?php echo $_GET['cid'] ?>">Ver detalles de la asignación</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            <?php endif; ?>
+        <?php endforeach; ?>
+    </div>
 <?php endforeach; ?>

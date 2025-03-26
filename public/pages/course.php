@@ -20,9 +20,9 @@ if ($_SESSION['user_role'] == 'admin' || $_SESSION['user_role'] == 'master') {
     }
     $course = $result->fetch_assoc();
 } elseif ($_SESSION['user_role'] == 'user') {
-    $sql = "SELECT courses.* FROM courses JOIN user_courses ON courses.course_id = user_courses.course WHERE user_courses.user = ?";
+    $sql = "SELECT courses.* FROM courses JOIN user_courses ON courses.course_id = user_courses.course WHERE user_courses.user = ? AND user_courses.course = ?";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("i", $_SESSION['user_id']);
+    $stmt->bind_param("ii", $_SESSION['user_id'], $_GET['cid']);
     $stmt->execute();
     $result = $stmt->get_result();
     if (!isset($result) || $result->num_rows === 0) {
@@ -119,7 +119,7 @@ if ($_SESSION['user_role'] == 'admin' || $_SESSION['user_role'] == 'master') {
 
             </div>
             <div class="col-sm-12 col-md-8 col-lg-9">
-                <div id="course-content" class="container border rounded mt-3">
+                <div id="course-content" class="container mt-3">
                 </div>
             </div>
         </div>
