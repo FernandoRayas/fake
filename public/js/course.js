@@ -82,7 +82,7 @@ options.forEach((option) => {
         scriptAssignments();
       }, 200);
     } else if (clickedElement === options[2]) {
-      loadComponent("course_kardex.php", clickedElement);
+      loadComponent(`course_kardex.php?cid=${cid}`, clickedElement);
     } else if (clickedElement === options[3]) {
       loadComponent(`course_enrolled.php?cid=${cid}`, clickedElement);
     } else if (clickedElement === options[4]) {
@@ -517,7 +517,7 @@ const scriptAssignments = () => {
           formData.append("assignment-files[]", files[i]);
         }
 
-        fetch("../files/create_file.php", {
+        fetch(`../files/create_assignment_file.php?aid=${aid}`, {
           method: "POST",
           body: formData,
         })

@@ -1,4 +1,4 @@
 
 # Ignorar el archivo .env
 .env
-.\public\files\uploads\*
+files/uploads

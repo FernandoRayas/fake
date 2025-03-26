@@ -21,6 +21,7 @@ $topics = [];
 while ($row = $topicResult->fetch_assoc()) {
     $topics[] = $row;
 }
+$topicStmt->close();
 
 $assignmentSql = "SELECT assignments.* FROM assignments JOIN topics ON assignments.topic = topics.topic_id JOIN courses ON topics.course = courses.course_id WHERE courses.course_id = ?";
 $assignmentStmt = $conn->prepare($assignmentSql);
@@ -31,10 +32,26 @@ $assignments = [];
 while ($row = $assignmentResult->fetch_assoc()) {
     $assignments[] = $row;
 }
+$assignmentStmt->close();
+
+$files = [];
+foreach ($assignments as $assignment) {
+    $assignmentId = $assignment['assignment_id'];
+
+    $assignmentFilesSql = "SELECT files.*, assignment FROM files JOIN assignments_files ON files.file_id = assignments_files.file JOIN assignments ON assignments_files.assignment = assignments.assignment_id WHERE assignment_id = ?";
+    $assignmentFilesStmt = $conn->prepare($assignmentFilesSql);
+    $assignmentFilesStmt->bind_param('i', $assignmentId);
+    $assignmentFilesStmt->execute();
+    $assignmentFilesResult = $assignmentFilesStmt->get_result();
+    $files = [];
+    while ($row = $assignmentFilesResult->fetch_assoc()) {
+        $files[] = $row;
+    }
+}
 ?>
 
 <div class="row d-flex align-items-center my-2 border rounded py-2">
-    <h2 class="col-9 col-sm-8 col-md-8 col-lg-9 col-xl-10 col-xxl-10">Trabajo de Curso</h2>
+    <h2 class="col-12 col-sm-12 col-md-8 col-lg-9 col-xl-10 col-xxl-10">Trabajo de Curso</h2>
     <?php if ($_SESSION['user_role'] == 'master'): ?>
         <div id="dropdown" class="dropdown col-3 col-sm-4 col-md-4 col-lg-3 col-xl-2 col-xxl-2">
             <button class="btn btn-secondary dropdown-toggle d-flex align-items-center" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -190,9 +207,22 @@ while ($row = $assignmentResult->fetch_assoc()) {
                     </h2>
                     <div id="collapse<?= $assignment['assignment_id'] ?>" class="accordion-collapse collapse" aria-labelledby="heading<?= $assignment['assignment_id'] ?>" data-bs-parent="#assignments-accordion<?= $row['topic_id'] ?>">
                         <div class="accordion-body">
-                            <p><?= $assignment['assignment_description'] ?></p>
+                            <?php if ($assignment['assignment_description'] == ""): ?>
+                                <p>No se proporciono una descripción de la tarea</p>
+                            <?php else: ?>
+                                <p><?= $assignment['assignment_description'] ?></p>
+                            <?php endif; ?>
+                            <div class="row">
+                                <?php foreach ($files as $file): ?>
+                                    <?php if ($file['assignment'] == $assignment['assignment_id']): ?>
+                                        <div class="col-12 col-sm-12 col-md-6">
+                                            <a class="text-secondary link-secondary link-underline link-underline-opacity-0 link-underline-opacity-100-hover" href="<?= htmlspecialchars("../files/" . $file['file_path']) ?>" target="_blank"><?= $file['file_name']  ?></a>
+                                        </div>
+                                    <?php endif; ?>
+                                <?php endforeach; ?>
+                            </div>
                             <div class="container">
-                                <a href="assignment.php?aid=<?= $assignment['assignment_id'] ?>&cid=<?php echo $_GET['cid'] ?>">Ver detalles de la asignación</a>
+                                <a class="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover" href="assignment.php?aid=<?= $assignment['assignment_id'] ?>&cid=<?php echo $_GET['cid'] ?>">Ver detalles de la asignación</a>
                             </div>
                         </div>
                     </div>

@@ -24,7 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['assignment-files'])) 
             $fileSize = $files['size'][$fileIndex];
 
             $fileExtension = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
-            $path = "uploads/" . $files['name'][$fileIndex];
+            $path = "uploads/" . uniqid() . $files['name'][$fileIndex];
 
             $allowedExtensions = [
                 "pdf",
@@ -66,7 +66,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['assignment-files'])) 
                     $getLastFileIdQuery = $conn->query("SELECT MAX(file_id) as file_id FROM files");
                     $lastFileId = $getLastFileIdQuery->fetch_assoc()['file_id'];
 
-                    $linkAssignmentFileSql = "INSERT INTO assignments_files VALUES (?,?)";
+                    $linkAssignmentFileSql = "INSERT INTO assignments_files (assignment, file) VALUES (?,?)";
                     $linkAssignmentFileStmt = $conn->prepare($linkAssignmentFileSql);
                     $linkAssignmentFileStmt->bind_param('ii', $lastAssignmentId, $lastFileId);
                     if ($linkAssignmentFileStmt->execute()) {

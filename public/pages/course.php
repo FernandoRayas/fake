@@ -8,6 +8,16 @@ if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] != 'admin' && $_SES
 
 include "../modelo/conexion.php";
 
+$courseCodeSql = "SELECT code FROM course_codes WHERE course = ?";
+$courseCodeStmt = $conn->prepare($courseCodeSql);
+$courseCodeStmt->bind_param('i', $_GET['cid']);
+$courseCodeStmt->execute();
+$courseCodeResult = $courseCodeStmt->get_result();
+
+if ($courseCodeResult->num_rows > 0) {
+    $courseCode = $courseCodeResult->fetch_assoc();
+}
+
 if ($_SESSION['user_role'] == 'admin' || $_SESSION['user_role'] == 'master') {
     $sql = "SELECT * FROM courses WHERE course_id = ? AND created_by = ?";
     $stmt = $conn->prepare($sql);
@@ -75,8 +85,8 @@ if ($_SESSION['user_role'] == 'admin' || $_SESSION['user_role'] == 'master') {
         </nav>
     </div>
 
-    <div class="hero-container container bg-primary rounded">
-        <div class="mt-3">
+    <div class="hero-container d-flex container bg-primary rounded">
+        <div class="mt-3 ms-3">
             <h1 class="text-white"><?php echo $course['course_name']  ?></h1>
         </div>
     </div>
@@ -109,13 +119,23 @@ if ($_SESSION['user_role'] == 'admin' || $_SESSION['user_role'] == 'master') {
                         </svg>
                         <span class="ms-3">Usuarios Inscritos en el Curso</span>
                     </button>
-                    <button class="list-group-item list-group-item-action d-flex align-items-center" type="button">
+                    <!-- <button class="list-group-item list-group-item-action d-flex align-items-center" type="button">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-people" viewBox="0 0 16 16">
                             <use xlink:href="#gear" />
                         </svg>
                         <span class="ms-3">Configuración</span>
-                    </button>
+                    </button> -->
                 </div>
+
+                <?php if ($_SESSION['user_role'] == 'master'): ?>
+                    <div class="border rounded mt-3  p-3">
+                        <h4>Código del Curso: </h4>
+                        <div class="border-top border-1 mb-3"></div>
+                        <h5 class="text-secondary text-center">
+                            <?php echo $courseCode['code'] ?>
+                        </h5>
+                    </div>
+                <?php endif; ?>
 
             </div>
             <div class="col-sm-12 col-md-8 col-lg-9">
