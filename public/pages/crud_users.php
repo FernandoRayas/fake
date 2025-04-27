@@ -9,9 +9,29 @@ if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] != 'admin') {
 // Conexión a la base de datos
 include "../modelo/conexion.php"; 
 
-// Obtener todos los usuarios
+// Consulta base
 $sql = "SELECT * FROM users";
-$result = $conn->query($sql);
+$params = [];
+$types = '';
+
+// Si hay búsqueda, agregamos condiciones
+if (isset($_GET['search']) && !empty($_GET['search'])) {
+    $search = $_GET['search'];
+    $sql .= " WHERE id LIKE ? OR name LIKE ? OR email LIKE ? OR role LIKE ?";
+    $searchParam = "%$search%";
+    $params = array_fill(0, 4, $searchParam);
+    $types = str_repeat('s', 4); // 4 strings
+}
+
+// Preparar la consulta
+$stmt = $conn->prepare($sql);
+
+if ($params) {
+    $stmt->bind_param($types, ...$params);
+}
+
+$stmt->execute();
+$result = $stmt->get_result();
 ?>
 
 <!DOCTYPE html>
@@ -36,6 +56,15 @@ $result = $conn->query($sql);
     <!-- <a href="../auth/logout.php" class="btn btn-danger mb-3">Cerrar sesión</a> -->
     <a href="dashboard.php" class="btn btn-danger mb-3">Volver</a>
     <a href="../crud_users/crear_usuario.php" class="btn btn-success mb-3">Agregar Usuario</a>
+
+    <div class="input-group mb-2">
+        <form method="GET" action="" class="d-flex w-100">
+            <input type="text" class="form-control" name="search" placeholder="Buscar usuario.." 
+                value="<?= isset($_GET['search']) ? htmlspecialchars($_GET['search']) : '' ?>">
+            <button class="btn btn-outline-primary" type="submit">Buscar</button>
+            <a href="?" class="btn btn-outline-secondary">Limpiar</a>
+        </form>
+    </div>
 
     <!-- Tabla principal -->
     <table class="table table-bordered">
