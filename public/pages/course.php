@@ -128,6 +128,12 @@ if ($_SESSION['user_role'] == 'admin' || $_SESSION['user_role'] == 'master') {
                         </svg>
                         <span class="ms-3">Usuarios Inscritos en el Curso</span>
                     </button>
+                    <button class="list-group-item list-group-item-action d-flex align-items-center" type="button">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-question-circle" viewBox="0 0 16 16">
+                            <use xlink:href="#question-circle" />
+                        </svg>
+                        <span class="ms-3">Preguntas de la clase</span>
+                    </button>
                     <!-- <button class="list-group-item list-group-item-action d-flex align-items-center" type="button">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-people" viewBox="0 0 16 16">
                             <use xlink:href="#gear" />
@@ -182,6 +188,14 @@ if ($_SESSION['user_role'] == 'admin' || $_SESSION['user_role'] == 'master') {
         </symbol>
         <symbol id="people-fill" width="16" height="16" fill="currentColor" class="bi bi-people-fill" viewBox="0 0 16 16">
             <path d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6m-5.784 6A2.24 2.24 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.3 6.3 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1zM4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5" />
+        </symbol>
+        <symbol id="question-circle" width="16" height="16" fill="currentColor" class="bi bi-question-circle" viewBox="0 0 16 16">
+            <path d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 1 8 0a8 8 0 0 1 0 16z"/>
+            <path d="M5.255 5.786a2.5 2.5 0 1 1 4.49 1.511c-.3.49-.86.944-1.547 1.414-.651.448-.963.761-.972 1.215v.07a.5.5 0 0 1-1 0v-.07c.01-.635.417-1.04 1.07-1.51.682-.494 1.165-.885 1.366-1.3a1.5 1.5 0 1 0-2.707-.924.5.5 0 1 1-.866-.5zM7.001 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0z"/>
+        </symbol>
+        <symbol id="question-circle-fill" width="16" height="16" fill="currentColor" class="bi bi-question-circle-fill" viewBox="0 0 16 16">
+            <path d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 1 8 0a8 8 0 0 1 0 16z"/>
+            <path d="M5.255 5.786a2.5 2.5 0 1 1 4.49 1.511c-.3.49-.86.944-1.547 1.414-.651.448-.963.761-.972 1.215v.07a.5.5 0 0 1-1 0v-.07c.01-.635.417-1.04 1.07-1.51.682-.494 1.165-.885 1.366-1.3a1.5 1.5 0 1 0-2.707-.924.5.5 0 1 1-.866-.5zM7.001 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0z"/>
         </symbol>
         <symbol id="gear" width="16" height="16" fill="currentColor" class="bi bi-gear" viewBox="0 0 16 16">
             <path d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492M5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0" />

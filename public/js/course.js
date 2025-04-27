@@ -79,6 +79,7 @@ options.forEach((option, index) => {
       `course_assignments.php?cid=${cid}`,
       `course_kardex.php?cid=${cid}`,
       `course_enrolled.php?cid=${cid}`,
+      `course_questions.php?cid=${cid}`,
       `course_settings.php?cid=${cid}`
     ];
     
