@@ -49,11 +49,14 @@ const loadComponent = (componentName, clickedElement) => {
       }
     }
   });
-  clickedElement.classList.add("active");
-  const icon = clickedElement.querySelector("use");
-  let href = icon.getAttribute("xlink:href");
-  href += "-fill";
-  icon.setAttribute("xlink:href", href);
+  
+  if (clickedElement) {
+    clickedElement.classList.add("active");
+    const icon = clickedElement.querySelector("use");
+    let href = icon.getAttribute("xlink:href");
+    href += "-fill";
+    icon.setAttribute("xlink:href", href);
+  }
 
   courseContent.innerHTML = "";
 
@@ -68,27 +71,32 @@ const loadComponent = (componentName, clickedElement) => {
     });
 };
 
-options.forEach((option) => {
+options.forEach((option, index) => {
   option.addEventListener("click", (event) => {
-    // Obtener el elemento que disparó el evento
     const clickedElement = event.currentTarget;
-
-    // Determinar qué componente cargar según el elemento clicado
-    if (clickedElement === options[0]) {
-      loadComponent(`course_home.php?cid=${cid}`, clickedElement);
-    } else if (clickedElement === options[1]) {
-      loadComponent(`course_assignments.php?cid=${cid}`, clickedElement);
-      setTimeout(() => {
-        scriptAssignments();
-      }, 200);
-    } else if (clickedElement === options[2]) {
-      loadComponent(`course_kardex.php?cid=${cid}`, clickedElement);
-    } else if (clickedElement === options[3]) {
-      loadComponent(`course_enrolled.php?cid=${cid}`, clickedElement);
-    } else if (clickedElement === options[4]) {
-      loadComponent(`course_settings.php?cid=${cid}`, clickedElement);
+    const components = [
+      `course_home.php?cid=${cid}`,
+      `course_assignments.php?cid=${cid}`,
+      `course_kardex.php?cid=${cid}`,
+      `course_enrolled.php?cid=${cid}`,
+      `course_settings.php?cid=${cid}`
+    ];
+    
+    if (index < components.length) {
+      loadComponent(components[index], clickedElement);
+      
+      if (index === 1) {
+        setTimeout(() => {
+          scriptAssignments();
+        }, 200);
+      }
     }
   });
+});
+
+// Cargar automáticamente el contenido de inicio al cargar la página
+document.addEventListener('DOMContentLoaded', function() {
+    loadComponent(`course_home.php?cid=${cid}`, options[0]);
 });
 
 const scriptAssignments = () => {
