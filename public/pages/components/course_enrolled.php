@@ -6,6 +6,8 @@ if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] != 'admin' && $_SES
     exit();
 }
 
+
+
 include "../../modelo/conexion.php";
 
 $enrolledUsersSql = "SELECT users.id, users.name, user_courses.enrollment_role FROM users JOIN user_courses ON users.id = user_courses.user JOIN courses ON user_courses.course = courses.course_id WHERE course_id = ?";

@@ -91,7 +91,7 @@ if ($_SESSION['user_role'] == 'admin' || $_SESSION['user_role'] == 'master') {
         </div>
     </div>
 
-    <div class="container">
+    <div id="app" class="container">
         <div class="row mb-3">
             <div class="col-sm-12 col-md-4 col-lg-3">
                 <div class="list-group mt-3">
@@ -184,6 +184,7 @@ if ($_SESSION['user_role'] == 'admin' || $_SESSION['user_role'] == 'master') {
     </svg>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="../js/course.js"></script>
 
 </body>
