@@ -887,6 +887,7 @@ function loadQuizStatistics() {
 
 // Función para inicializar gráficos
 function initializeCharts() {
+  console.log("estadisticas")
     // Inicializar gráficos si hay elementos canvas para ellos
     const chartElements = document.querySelectorAll('.statistics-chart');
     

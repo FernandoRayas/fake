@@ -772,12 +772,24 @@ function getQuizStatistics($conn) {
                 </div>
              </div>';
         
+        // Agregar referencia a Chart.js si no está ya incluida
+        echo '<script>
+            if (typeof Chart === "undefined") {
+                var script = document.createElement("script");
+                script.src = "https://cdn.jsdelivr.net/npm/chart.js";
+                document.head.appendChild(script);
+            }
+        </script>';
+        
         // Obtener preguntas del cuestionario
         $query = "SELECT * FROM questions WHERE quiz_id = ? ORDER BY position";
         $stmt = $conn->prepare($query);
         $stmt->bind_param("i", $quiz_id);
         $stmt->execute();
         $questions_result = $stmt->get_result();
+        
+        // Crear un array para almacenar la configuración de los gráficos
+        $charts_config = [];
         
         $question_number = 1;
         while ($question = $questions_result->fetch_assoc()) {
@@ -829,132 +841,175 @@ function getQuizStatistics($conn) {
             } else {
                 // Estadísticas para preguntas cerradas
                 $query = "SELECT qo.option_text, COUNT(a.option_id) as count 
-                          FROM question_options qo 
-                          LEFT JOIN answers a ON qo.option_id = a.option_id 
-                          WHERE qo.question_id = ? 
-                          GROUP BY qo.option_id
-                          ORDER BY count DESC";
-                          
+                FROM question_options qo 
+                LEFT JOIN answers a ON qo.option_id = a.option_id 
+                WHERE qo.question_id = ? 
+                GROUP BY qo.option_id
+                ORDER BY count DESC";
+
                 $stmt = $conn->prepare($query);
                 $stmt->bind_param("i", $question['question_id']);
                 $stmt->execute();
                 $options_result = $stmt->get_result();
-                
+
                 if ($options_result->num_rows > 0) {
-                    // Preparar datos para el gráfico
-                    $labels = [];
-                    $data = [];
-                    $colors = [];
-                    
-                    // Colores para el gráfico
-                    $chart_colors = [
-                        'rgba(75, 192, 192, 0.7)',
-                        'rgba(255, 99, 132, 0.7)',
-                        'rgba(54, 162, 235, 0.7)',
-                        'rgba(255, 206, 86, 0.7)',
-                        'rgba(153, 102, 255, 0.7)',
-                        'rgba(255, 159, 64, 0.7)'
-                    ];
-                    
-                    $color_index = 0;
-                    $total_responses = 0;
-                    
-                    // Primero contamos el total de respuestas
-                    while ($option = $options_result->fetch_assoc()) {
-                        $total_responses += $option['count'];
-                    }
-                    
-                    // Reiniciamos el puntero del resultado
-                    $options_result->data_seek(0);
-                    
-                    // Ahora construimos los arrays para el gráfico
-                    echo '<div class="row">
-                            <div class="col-md-6">
-                                <div class="table-responsive">
-                                    <table class="table table-striped">
-                                        <thead>
-                                            <tr>
-                                                <th>Opción</th>
-                                                <th>Respuestas</th>
-                                                <th>Porcentaje</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>';
-                    
-                    while ($option = $options_result->fetch_assoc()) {
-                        $labels[] = $option['option_text'];
-                        $data[] = $option['count'];
-                        $colors[] = $chart_colors[$color_index % count($chart_colors)];
-                        $color_index++;
-                        
-                        $percentage = ($total_responses > 0) ? round(($option['count'] / $total_responses) * 100, 1) : 0;
-                        
-                        echo '<tr>
-                                <td>' . htmlspecialchars($option['option_text']) . '</td>
-                                <td>' . $option['count'] . '</td>
-                                <td>' . $percentage . '%</td>
-                              </tr>';
-                    }
-                    
-                    echo '        </tbody>
-                                </table>
-                            </div>
-                        </div>';
-                    
-                    // Contenedor para el gráfico
-                    echo '<div class="col-md-6">
-                            <canvas id="chart_question_' . $question['question_id'] . '" width="400" height="300"></canvas>
-                          </div>
-                          <script>
-                          document.addEventListener("DOMContentLoaded", function() {
-                              var ctx = document.getElementById("chart_question_' . $question['question_id'] . '").getContext("2d");
-                              var myChart = new Chart(ctx, {
-                                  type: "pie",
-                                  data: {
-                                      labels: ' . json_encode($labels) . ',
-                                      datasets: [{
-                                          data: ' . json_encode($data) . ',
-                                          backgroundColor: ' . json_encode($colors) . ',
-                                          borderWidth: 1
-                                      }]
-                                  },
-                                  options: {
-                                      responsive: true,
-                                      plugins: {
-                                          legend: {
-                                              position: "bottom"
-                                          },
-                                          tooltip: {
-                                              callbacks: {
-                                                  label: function(context) {
-                                                      var label = context.label || "";
-                                                      var value = context.raw || 0;
-                                                      var percentage = Math.round((value / ' . $total_responses . ') * 100);
-                                                      return label + ": " + value + " (" + percentage + "%)";
-                                                  }
-                                              }
-                                          }
-                                      }
-                                  }
-                              });
-                          });
-                          </script>';
-                } else {
-                    echo '<div class="alert alert-info">Aún no hay respuestas para esta pregunta.</div>';
+                // Preparar datos para el gráfico
+                $labels = [];
+                $data = [];
+                $colors = [];
+
+                // Colores para el gráfico
+                $chart_colors = [
+                'rgba(75, 192, 192, 0.7)',
+                'rgba(255, 99, 132, 0.7)',
+                'rgba(54, 162, 235, 0.7)',
+                'rgba(255, 206, 86, 0.7)',
+                'rgba(153, 102, 255, 0.7)',
+                'rgba(255, 159, 64, 0.7)'
+                ];
+                $color_index = 0;
+                $total_responses = 0;
+
+                // Primero contamos el total de respuestas
+                while ($option = $options_result->fetch_assoc()) {
+                $total_responses += $option['count'];
                 }
+
+                // Reiniciamos el puntero del resultado
+                $options_result->data_seek(0);
+
+                // Construimos la fila que contiene tanto la tabla como el gráfico
+                echo '<div class="row">
+                <!-- Columna para la tabla de resultados -->
+                <div class="col-md-6">
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Opción</th>
+                                    <th>Respuestas</th>
+                                    <th>Porcentaje</th>
+                                </tr>
+                            </thead>
+                            <tbody>';
+
+                while ($option = $options_result->fetch_assoc()) {
+                $labels[] = $option['option_text'];
+                $data[] = $option['count'];
+                $colors[] = $chart_colors[$color_index % count($chart_colors)];
+                $color_index++;
+
+                $percentage = ($total_responses > 0) ? round(($option['count'] / $total_responses) * 100, 1) : 0;
+
+                echo '<tr>
+                    <td>' . htmlspecialchars($option['option_text']) . '</td>
+                    <td>' . $option['count'] . '</td>
+                    <td>' . $percentage . '%</td>
+                    </tr>';
+                }
+
+                echo '        </tbody>
+                    </table>
+                </div>
+                </div>';
+
+                // Columna para el gráfico (al lado de la tabla)
+                echo '<div class="col-md-6">
+                <div class="chart-container" style="position: relative; height:300px;">
+                    <canvas id="chart_question_' . $question['question_id'] . '"></canvas>
+                </div>
+                </div>';
+
+                // Cerramos la fila que contiene la tabla y el gráfico
+                echo '</div>';
+
+                // Almacenar la configuración del gráfico para inicializarlo después
+                $chart_id = 'chart_question_' . $question['question_id'];
+                $charts_config[] = [
+                'id' => $chart_id,
+                'type' => 'pie',
+                'labels' => $labels,
+                'data' => $data,
+                'colors' => $colors,
+                'total' => $total_responses
+                ];
+                } else {
+                echo '<div class="alert alert-info">Aún no hay respuestas para esta pregunta.</div>';
+                }
+
+                // El resto del código para la inicialización de gráficos permanece igual
             }
             
             echo '</div></div>';
             $question_number++;
         }
         
-        // Agregar inicialización de gráficos si es necesario
-        echo '<script>
-        function initializeCharts() {
-            // Los gráficos ya se inicializan mediante callbacks en DOMContentLoaded
-            // Esta función se mantiene por compatibilidad con el llamado desde JS
+        // Crear el script para inicializar todos los gráficos
+        if (!empty($charts_config)) {
+            echo '<script>
+            // Función para inicializar los gráficos
+            function initializeCharts() {
+                if (typeof Chart === "undefined") {
+                    // Si Chart.js no está cargado aún, intentar después de 500ms
+                    setTimeout(initializeCharts, 500);
+                    return;
+                }
+                
+                // Configuración de cada gráfico
+                var chartsConfig = ' . json_encode($charts_config) . ';
+                
+                // Inicializar cada gráfico
+                chartsConfig.forEach(function(config) {
+                    var ctx = document.getElementById(config.id).getContext("2d");
+                    new Chart(ctx, {
+                        type: config.type,
+                        data: {
+                            labels: config.labels,
+                            datasets: [{
+                                data: config.data,
+                                backgroundColor: config.colors,
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: {
+                                    position: "bottom"
+                                },
+                                tooltip: {
+                                    callbacks: {
+                                        label: function(context) {
+                                            var label = context.label || "";
+                                            var value = context.raw || 0;
+                                            var percentage = Math.round((value / config.total) * 100);
+                                            return label + ": " + value + " (" + percentage + "%)";
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    });
+                });
+            }
+            
+            // Inicializar gráficos cuando la página esté lista
+            document.addEventListener("DOMContentLoaded", initializeCharts);
+            
+            // Si el documento ya está cargado (en caso de AJAX), inicializar inmediatamente
+            if (document.readyState === "complete" || document.readyState === "interactive") {
+                setTimeout(initializeCharts, 100);
+            }
+            </script>';
+        } else {
+            // Función vacía para compatibilidad
+            echo '<script>
+            function initializeCharts() {
+                // No hay gráficos para inicializar
+            }
+            </script>';
         }
-        </script>';
     } else {
         echo '<div class="alert alert-danger">No se encontró el cuestionario solicitado.</div>';
     }
