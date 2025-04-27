@@ -1,8 +1,8 @@
 <?php
 // Inicia sesión y configuración de errores
 session_start();
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
+// error_reporting(E_ALL);
+// ini_set('display_errors', 1);
 
 // Conexión a la base de datos
 include "../../modelo/conexion.php";
@@ -80,7 +80,7 @@ include "../../quizzes/quiz_controller.php";
                 </nav> -->
                 
                 <h2 class="mb-4">
-                    <i class="fas fa-clipboard-question me-2"></i>Sistema de Cuestionarios
+                    <i class="fas fa-clipboard-question me-2"></i>Cuestionarios
                     <?php if ($user_role == 'master' || $user_role == 'admin'): ?>
                         <button type="button" class="btn btn-primary float-end" data-bs-toggle="modal" data-bs-target="#createQuizModal">
                             <i class="fas fa-plus me-2"></i>Crear Cuestionario

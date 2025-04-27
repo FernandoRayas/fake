@@ -1,12 +1,20 @@
 <?php
 
+// course.php
 session_start();
-if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] != 'admin' && $_SESSION['user_role'] != 'master' && $_SESSION['user_role'] != 'user') {
+
+if (session_status() !== PHP_SESSION_ACTIVE) {
+    die('Error: Sesión no iniciada');
+}
+
+// Validación de sesión y rol
+if (!isset($_SESSION['user_role']) || !in_array($_SESSION['user_role'], ['admin', 'master', 'user'])) {
     header("Location: ../index.php");
     exit();
 }
 
 include "../modelo/conexion.php";
+
 
 $courseCodeSql = "SELECT code FROM course_codes WHERE course = ?";
 $courseCodeStmt = $conn->prepare($courseCodeSql);
@@ -41,6 +49,7 @@ if ($_SESSION['user_role'] == 'admin' || $_SESSION['user_role'] == 'master') {
     }
     $course = $result->fetch_assoc();
 }
+
 ?>
 
 <!DOCTYPE html>
