@@ -91,6 +91,8 @@
             <p id="captchaError" class="error">¡Captcha incorrecto!</p>
 
             <input type="submit" name="btnLogin" value="Iniciar sesión">
+
+            <p>Dudas o quejas al telefono: <u> 6181795344</u></p>
         </form>
     </div>
 
