@@ -1,6 +1,7 @@
 # Fake App
 
 **Integrante: Rayas Alvarado Juan Fernando**
+
 **Integrante: Abraham Alejandro De La Hoya Angeles**
 
 ## Descripción del Proyecto
