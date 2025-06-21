@@ -1,5 +1,8 @@
-
 # Fake App
+
+**Integrante: Rayas Alvarado Juan Fernando**
+
+
 
 ## Descripción del Proyecto
 
