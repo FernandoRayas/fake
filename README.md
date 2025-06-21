@@ -4,6 +4,8 @@
 
 **Integrante: Abraham Alejandro De La Hoya Angeles**
 
+**Integrante: Hernández Ochoa Pablo Rodrigo**
+
 ## Descripción del Proyecto
 
 **Fake** es una aplicación web que incluye un módulo de chat como herramienta principal para la comunicación entre usuarios. Este chat permite a los usuarios interactuar en tiempo real, enviar mensajes de texto y recibir notificaciones instantáneas, facilitando una interacción fluida y eficiente dentro de la plataforma.
@@ -15,6 +17,7 @@ La aplicación está diseñada para gestionar información personal y permitir i
 Para ejecutar la aplicación de manera correcta, es necesario configurar un archivo `.env` con tus propias credenciales y configuraciones. A continuación, se describen los pasos para preparar tu entorno de desarrollo:
 
 ### 1. Crear archivo `.env`
+
 - Renombra el archivo `.env_template` a `.env`.
 - Dentro de este archivo, encontrarás las variables de entorno que necesitas personalizar. Asegúrate de incluir tus credenciales de base de datos, como se muestra a continuación:
 
@@ -28,6 +31,7 @@ DATABASE=
 **Nota**: Cambia las credenciales con las de tu propia base de datos.
 
 ### 2. Dependencias
+
 La aplicación no requiere dependencias externas adicionales. Sin embargo, asegúrate de tener configurado tu servidor local y entorno adecuado para ejecutar PHP y MySQL.
 
 ## Características
@@ -44,10 +48,12 @@ La aplicación no requiere dependencias externas adicionales. Sin embargo, aseg�
 ## Instrucciones de Uso
 
 1. **Configura tu entorno**:
+
    - Renombra el archivo `.env_template` a `.env`.
    - Abre el archivo `.env` y reemplaza las credenciales de la base de datos con las correctas.
 
 2. **Configuración del servidor**:
+
    - Asegúrate de tener un servidor local en funcionamiento (por ejemplo, XAMPP, MAMP, etc.).
    - Configura tu base de datos utilizando las credenciales que colocaste en el archivo `.env`.
 
