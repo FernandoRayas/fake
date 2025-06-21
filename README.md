@@ -1,6 +1,12 @@
 # Fake App
 
 **Integrante: Rayas Alvarado Juan Fernando**
+**Integrante: De La Hoya Angeles Abraham Alejandro**
+**Integrante: De León Ávila Yajseel Sarahí**
+**Integrante: Estrada Quezada Juan Daniel**
+**Integrante: Hernández Ochoa Pablo Rodrigo**
+**Integrante: Inzunza Pereyra Lizbeth Joseline**
+**Integrante: Solórzano Juárez Brayan Arturo**
 
 
 
