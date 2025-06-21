@@ -1,9 +1,5 @@
 # Fake App
 
-**Integrante: Rayas Alvarado Juan Fernando**
-
-
-
 ## Descripción del Proyecto
 
 **Fake** es una aplicación web que incluye un módulo de chat como herramienta principal para la comunicación entre usuarios. Este chat permite a los usuarios interactuar en tiempo real, enviar mensajes de texto y recibir notificaciones instantáneas, facilitando una interacción fluida y eficiente dentro de la plataforma.
