@@ -15,15 +15,58 @@ if (!isset($_SESSION['user_role'])) {
     <link rel="icon" href="../images/icono_fake.png" type="image/x-icon">
     <title>Home - Fake</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
+        :root {
+            --bg-color: #f8f9fa;
+            --text-color: #333;
+            --card-bg: #fff;
+            --shadow: rgba(0, 0, 0, 0.1);
+            --primary-color: #5c6bc0;
+            --primary-hover: #3f51b5;
+        }
+
+        [data-theme="dark"] {
+            --bg-color: #1a1a1a;
+            --text-color: #e0e0e0;
+            --card-bg: #2d2d2d;
+            --shadow: rgba(0, 0, 0, 0.3);
+            --primary-color: #7986cb;
+            --primary-hover: #5c6bc0;
+        }
+
         body {
             font-family: 'Arial', sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f8f9fa;
+            background-color: var(--bg-color);
+            color: var(--text-color);
             display: flex;
             flex-direction: column;
             align-items: center;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            font-size: 20px;
+            cursor: pointer;
+            box-shadow: 0 2px 10px var(--shadow);
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .theme-toggle:hover {
+            background-color: var(--primary-hover);
+            transform: scale(1.1);
         }
 
         .logo {
@@ -35,7 +78,7 @@ if (!isset($_SESSION['user_role'])) {
             text-align: center;
             font-size: 24px;
             margin-top: 20px;
-            color: #333;
+            color: var(--text-color);
         }
 
         .product-container {
@@ -47,12 +90,13 @@ if (!isset($_SESSION['user_role'])) {
         }
 
         .product {
-            background-color: #fff;
+            background-color: var(--card-bg);
             padding: 20px;
             border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 10px var(--shadow);
             width: 220px;
             text-align: center;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
         }
 
         .product img {
@@ -62,18 +106,18 @@ if (!isset($_SESSION['user_role'])) {
 
         .product-name {
             font-size: 18px;
-            color: #333;
+            color: var(--text-color);
             margin-top: 10px;
         }
 
         .product-price {
             font-size: 16px;
-            color: #5c6bc0;
+            color: var(--primary-color);
             margin-top: 5px;
         }
 
         .btn-buy {
-            background-color: #5c6bc0;
+            background-color: var(--primary-color);
             color: white;
             border: none;
             padding: 10px;
@@ -85,7 +129,7 @@ if (!isset($_SESSION['user_role'])) {
         }
 
         .btn-buy:hover {
-            background-color: #3f51b5;
+            background-color: var(--primary-hover);
         }
 
         .logout {
@@ -98,9 +142,28 @@ if (!isset($_SESSION['user_role'])) {
         .logout:hover {
             text-decoration: underline;
         }
+
+        /* Ajustes para breadcrumb en modo oscuro */
+        .breadcrumb {
+            background-color: var(--card-bg) !important;
+            transition: background-color 0.3s ease;
+        }
+
+        .breadcrumb a {
+            color: var(--primary-color);
+        }
+
+        .breadcrumb-item.active {
+            color: var(--text-color);
+        }
     </style>
 </head>
 <body>
+    <!-- Botón de cambio de tema -->
+    <button class="theme-toggle" onclick="toggleTheme()" title="Cambiar tema">
+        <i class="fas fa-moon" id="theme-icon"></i>
+    </button>
+
     <!-- Breadcrumb -->
     <div class="container mt-3">
         <nav aria-label="breadcrumb">
@@ -153,6 +216,37 @@ if (!isset($_SESSION['user_role'])) {
     </div>
 
     <!-- Cerrar sesión -->
-    <a href="dashboard.php" class="btn btn-danger mt-3"><i class="fas fa-sign-out-alt"></i> Volver</a>
+    <a href="dashboard.php" class="btn btn-danger mt-3 mb-3"><i class="fas fa-sign-out-alt"></i> Volver</a>
+
+    <script>
+        function toggleTheme() {
+            const body = document.body;
+            const themeIcon = document.getElementById('theme-icon');
+            
+            if (body.getAttribute('data-theme') === 'dark') {
+                body.removeAttribute('data-theme');
+                themeIcon.classList.remove('fa-sun');
+                themeIcon.classList.add('fa-moon');
+                localStorage.setItem('theme', 'light');
+            } else {
+                body.setAttribute('data-theme', 'dark');
+                themeIcon.classList.remove('fa-moon');
+                themeIcon.classList.add('fa-sun');
+                localStorage.setItem('theme', 'dark');
+            }
+        }
+
+        // Cargar tema guardado al inicio
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedTheme = localStorage.getItem('theme');
+            const themeIcon = document.getElementById('theme-icon');
+            
+            if (savedTheme === 'dark') {
+                document.body.setAttribute('data-theme', 'dark');
+                themeIcon.classList.remove('fa-moon');
+                themeIcon.classList.add('fa-sun');
+            }
+        });
+    </script>
 </body>
 </html>
