@@ -42,17 +42,36 @@
             font-size: 16px;
         }
 
-        input[type="submit"] {
-            width: 100%;
-            padding: 10px;
-            background-color: #5c6bc0;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            font-size: 16px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
+       input[type="submit"] {
+    width: 100%;
+    padding: 12px 20px;
+    background: linear-gradient(135deg, #5c6bc0, #3949ab);
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    font-size: 17px;
+    font-weight: bold;
+    text-transform: uppercase;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+input[type="submit"]:hover {
+    background: linear-gradient(135deg, #3f51b5, #283593);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    transform: scale(1.02);
+}
+
+input[type="submit"]:active {
+    transform: scale(0.98);
+}
+
+input[type="submit"]:focus {
+    outline: 2px solid #c5cae9;
+    outline-offset: 2px;
+}
+
 
         input[type="submit"]:hover {
             background-color: #3f51b5;
