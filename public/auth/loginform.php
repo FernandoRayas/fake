@@ -4,72 +4,142 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="../images/icono_fake.png" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap" rel="stylesheet">
     <title>Login</title>
     <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            background-color: #f8f9fa;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
 
+    body {
+        font-family: 'Poppins', sans-serif;
+        background: linear-gradient(120deg, #dbeafe, #f8f9fa);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+    }
+
+    .login-container {
+        background: #ffffff;
+        padding: 40px 30px;
+        border-radius: 18px;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        width: 340px;
+        text-align: center;
+        animation: fadeIn 0.9s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+        0% { opacity: 0; transform: translateY(20px); }
+        100% { opacity: 1; transform: translateY(0); }
+    }
+
+    .logo {
+        width: 100px;
+        margin-bottom: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease;
+    }
+
+    .logo:hover {
+        transform: scale(1.05);
+    }
+
+    h2 {
+        font-size: 22px;
+        font-weight: 600;
+        color: #2d3436;
+        margin-bottom: 25px;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    input[type="submit"],
+    input[type="captcha"],
+    #captcha {
+        width: 100%;
+        padding: 12px 14px;
+        margin: 8px 0;
+        border: 1px solid #ced6e0;
+        border-radius: 12px;
+        font-size: 15px;
+        transition: all 0.3s ease;
+    }
+
+    input:focus {
+        border-color: #5c6bc0;
+        outline: none;
+        box-shadow: 0 0 8px rgba(92, 107, 192, 0.2);
+    }
+
+    input[type="submit"] {
+        background: linear-gradient(135deg, #5c6bc0, #3f51b5);
+        color: white;
+        font-weight: 600;
+        cursor: pointer;
+        margin-top: 10px;
+        transition: background 0.3s ease, transform 0.2s ease;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    input[type="submit"]:hover {
+        background: linear-gradient(135deg, #3f51b5, #283593);
+        transform: scale(1.03);
+        box-shadow: 0 6px 14px rgba(0, 0, 0, 0.15);
+    }
+
+    input[type="submit"]:active {
+        transform: scale(0.97);
+    }
+
+    img#captcha-image {
+        margin: 12px 0;
+        border-radius: 8px;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+        width: 100%;
+        max-width: 260px;
+        object-fit: cover;
+    }
+
+    .error {
+        color: #e74c3c;
+        font-size: 13px;
+        margin-top: 4px;
+        text-align: left;
+        display: none;
+    }
+
+    p {
+        font-size: 14px;
+        color: #555;
+        margin-top: 14px;
+    }
+
+    u {
+        color: #3949ab;
+    }
+
+    @media screen and (max-width: 400px) {
         .login-container {
-            background-color: #fff;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            width: 300px;
-            text-align: center;
+            width: 90%;
+            padding: 30px 20px;
         }
 
         h2 {
-            color: #333;
-            margin-bottom: 20px;
-            font-size: 24px;
-        }
-
-        input[type="email"],
-        input[type="text"],
-        input[type="password"] {
-            width: 100%;
-            padding: 10px;
-            margin: 10px 0;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-            font-size: 16px;
+            font-size: 20px;
         }
 
         input[type="submit"] {
-            width: 100%;
-            padding: 10px;
-            background-color: #5c6bc0;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            font-size: 16px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-
-        input[type="submit"]:hover {
-            background-color: #3f51b5;
-        }
-
-        .logo {
-            width: 100px;
-            margin-bottom: 20px;
-        }
-
-        .error {
-            color: red;
             font-size: 14px;
-            margin-top: 5px;
-            display: none;
         }
-    </style>
+    }
+</style>
 </head>
 <body>
     <div class="login-container">

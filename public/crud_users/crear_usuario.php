@@ -55,6 +55,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        /* Estilo renovado para el formulario */
         /* Variables CSS */
         :root {
             --primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -66,6 +67,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         /* Layout Principal */
         body {
+            font-family: 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
             background: var(--primary);
             min-height: 100vh;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -105,6 +108,29 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             font-size: 2.5rem;
             font-weight: 700;
             text-align: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .container {
+            width: 45%;
+            max-width: 500px;
+            margin: 30px auto;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        h2 {
+            color: #2c3e50;
+            margin-bottom: 25px;
+            font-weight: 600;
+            font-size: 1.8em;
             margin-bottom: 30px;
         }
 
@@ -136,6 +162,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
             margin-bottom: 25px;
         }
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
 
         .form-group-modern {
             margin-bottom: 25px;
@@ -143,6 +172,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         .form-label-modern {
             display: block;
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: #34495e;
+            font-size: 0.95em;
+        }
+        input, select {
             font-weight: 600;
             color: #2c3e50;
             margin-bottom: 8px;
@@ -181,11 +216,29 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             transition: all 0.3s ease;
             cursor: pointer;
             width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #dfe6e9;
+            border-radius: 8px;
+            background-color: #f8f9fa;
+            transition: all 0.3s ease;
+            font-size: 0.95em;
         }
+        input:focus, select:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+            background-color: white;
+        }
+        button {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(to right, #3498db, #2c81ba);
 
         .btn-success-modern {
             background: var(--success);
             color: white;
+            border: none;
+            border-radius: 8px;
         }
 
         .btn-modern:hover {
@@ -235,6 +288,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             border: 2px solid #e9ecef;
             border-radius: 12px;
             cursor: pointer;
+            font-weight: 500;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+            letter-spacing: 0.5px;
+        }
+        button:hover {
+            background-color: #0056b3;
             transition: all 0.3s ease;
             text-align: center;
             font-weight: 500;
