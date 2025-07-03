@@ -51,43 +51,74 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <title>Crear Usuario</title>
     <link rel="stylesheet" href="styles.css">
     <style>
-        /* Estilo básico para el formulario */
+        /* Estilo renovado para el formulario */
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
+            font-family: 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
             text-align: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
         .container {
-            width: 50%;
-            margin: 50px auto;
-            padding: 20px;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            width: 45%;
+            max-width: 500px;
+            margin: 30px auto;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
         h2 {
-            color: #333;
+            color: #2c3e50;
+            margin-bottom: 25px;
+            font-weight: 600;
+            font-size: 1.8em;
         }
         .form-group {
-            margin-bottom: 15px;
+            margin-bottom: 20px;
+            text-align: left;
         }
         label {
             display: block;
-            font-weight: bold;
-            margin-bottom: 5px;
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: #34495e;
+            font-size: 0.95em;
         }
-        input, select, button {
+        input, select {
             width: 100%;
-            padding: 10px;
-            margin-top: 5px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
+            padding: 12px 15px;
+            border: 1px solid #dfe6e9;
+            border-radius: 8px;
+            background-color: #f8f9fa;
+            transition: all 0.3s ease;
+            font-size: 0.95em;
+        }
+        input:focus, select:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+            background-color: white;
         }
         button {
-            background-color: #007bff;
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(to right, #3498db, #2c81ba);
             color: white;
-            cursor: pointer;
             border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+            letter-spacing: 0.5px;
         }
         button:hover {
             background-color: #0056b3;
