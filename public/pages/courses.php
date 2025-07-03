@@ -201,6 +201,17 @@ if ($_SESSION['user_role'] === 'master' || $_SESSION['user_role'] === 'admin') {
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="../js/courses.js"></script>
+    <script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const footers = document.querySelectorAll(".card-footer");
+    const colors = ["#FFD700", "#FF6F61", "#6A5ACD", "#20B2AA", "#FFA07A", "#87CEEB", "#98FB98", "#FFB6C1", "#FF6347", "#4682B4", "#DDA0DD", "#F08080", "#20B2AA", "#FF4500", "#32CD32", "#00CED1"];
+    
+    footers.forEach(footer => {
+      const randomColor = colors[Math.floor(Math.random() * colors.length)];
+      footer.style.backgroundColor = randomColor;
+    });
+  });
+</script>
 </body>
 
 </html>
