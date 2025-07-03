@@ -55,17 +55,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        /* Variables CSS */
         :root {
-            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            --success-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-            --warning-gradient: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
-            --danger-gradient: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
-            --dark-gradient: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+            --primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --success: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --danger: #dc3545;
+            --warning: #ffc107;
+            --success-color: #28a745;
         }
 
+        /* Layout Principal */
         body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: var(--primary);
             min-height: 100vh;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             display: flex;
@@ -83,7 +84,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             width: 100%;
             max-width: 600px;
             position: relative;
-            overflow: hidden;
         }
 
         .main-container::before {
@@ -93,31 +93,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             left: 0;
             right: 0;
             height: 4px;
-            background: var(--primary-gradient);
+            background: var(--primary);
         }
 
-        .header-section {
-            text-align: center;
-            margin-bottom: 40px;
-        }
-
+        /* Título */
         .main-title {
-            background: var(--primary-gradient);
+            background: var(--primary);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
             font-size: 2.5rem;
             font-weight: 700;
-            margin-bottom: 10px;
-            animation: slideInDown 0.8s ease;
+            text-align: center;
+            margin-bottom: 30px;
         }
 
-        .subtitle {
-            color: #6c757d;
-            font-size: 1.1rem;
-            margin-bottom: 0;
-        }
-
+        /* Breadcrumb */
         .breadcrumb-modern {
             background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
             border-radius: 15px;
@@ -135,9 +126,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         .breadcrumb-modern .breadcrumb-item a:hover {
             color: #4f46e5;
-            transform: translateX(2px);
         }
 
+        /* Formulario */
         .form-modern {
             background: white;
             border-radius: 15px;
@@ -148,7 +139,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         .form-group-modern {
             margin-bottom: 25px;
-            position: relative;
         }
 
         .form-label-modern {
@@ -179,37 +169,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             border-color: #667eea;
             box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
             background: white;
-            transform: translateY(-1px);
         }
 
-        .form-control-modern:hover {
-            border-color: #d1d5db;
-            background: white;
-        }
-
-        .select-modern {
-            position: relative;
-        }
-
-        .select-modern::after {
-            content: '\f078';
-            font-family: "Font Awesome 6 Free";
-            font-weight: 900;
-            position: absolute;
-            right: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #667eea;
-            pointer-events: none;
-        }
-
-        .select-modern select {
-            appearance: none;
-            -webkit-appearance: none;
-            -moz-appearance: none;
-            padding-right: 45px;
-        }
-
+        /* Botones */
         .btn-modern {
             padding: 15px 30px;
             border-radius: 12px;
@@ -217,27 +179,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             border: none;
             font-size: 1rem;
             transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
             cursor: pointer;
             width: 100%;
         }
 
-        .btn-modern::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-            transition: left 0.5s ease;
-        }
-
-        .btn-modern:hover::before {
-            left: 100%;
+        .btn-success-modern {
+            background: var(--success);
+            color: white;
         }
 
         .btn-modern:hover {
@@ -245,35 +193,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
         }
 
-        .btn-success-modern {
-            background: var(--success-gradient);
-            color: white;
-        }
-
-        .btn-primary-modern {
-            background: var(--primary-gradient);
-            color: white;
-        }
-
-        .back-link-modern {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            color: #667eea;
-            text-decoration: none;
-            font-weight: 500;
-            padding: 10px 20px;
-            border-radius: 10px;
-            transition: all 0.3s ease;
-            background: rgba(102, 126, 234, 0.1);
-        }
-
-        .back-link-modern:hover {
-            color: #4f46e5;
-            background: rgba(102, 126, 234, 0.2);
-            transform: translateX(-5px);
-        }
-
+        /* Alertas */
         .alert-modern {
             padding: 15px 20px;
             border-radius: 12px;
@@ -282,30 +202,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             display: flex;
             align-items: center;
             gap: 10px;
-            animation: slideInDown 0.5s ease;
         }
 
         .alert-error {
             background: linear-gradient(135deg, #ffe6e6 0%, #ffcccc 100%);
-            color: #dc3545;
+            color: var(--danger);
             border: 1px solid #f5c6cb;
         }
 
         .alert-success {
             background: linear-gradient(135deg, #e6f7ff 0%, #ccf2ff 100%);
-            color: #28a745;
+            color: var(--success-color);
             border: 1px solid #c3e6cb;
         }
 
+        /* Roles */
         .role-options {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
             gap: 15px;
             margin-top: 10px;
-        }
-
-        .role-option {
-            position: relative;
         }
 
         .role-option input[type="radio"] {
@@ -325,11 +241,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
 
         .role-option input[type="radio"]:checked + label {
-            background: var(--primary-gradient);
+            background: var(--primary);
             color: white;
             border-color: #667eea;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
         }
 
         .role-option label i {
@@ -338,6 +252,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             margin-bottom: 5px;
         }
 
+        /* Barra de Contraseña */
         .password-strength {
             margin-top: 5px;
             font-size: 0.85rem;
@@ -357,33 +272,31 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             border-radius: 2px;
         }
 
-        .strength-weak { background: #dc3545; width: 25%; }
-        .strength-medium { background: #ffc107; width: 50%; }
-        .strength-good { background: #28a745; width: 75%; }
+        .strength-weak { background: var(--danger); width: 25%; }
+        .strength-medium { background: var(--warning); width: 50%; }
+        .strength-good { background: var(--success-color); width: 75%; }
         .strength-strong { background: #20c997; width: 100%; }
 
-        @keyframes slideInDown {
-            from {
-                transform: translateY(-30px);
-                opacity: 0;
-            }
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
+        /* Link de Regreso */
+        .back-link-modern {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 10px 20px;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            background: rgba(102, 126, 234, 0.1);
         }
 
-        @keyframes fadeInUp {
-            from {
-                transform: translateY(20px);
-                opacity: 0;
-            }
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
+        .back-link-modern:hover {
+            color: #4f46e5;
+            background: rgba(102, 126, 234, 0.2);
         }
 
+        /* Responsive */
         @media (max-width: 768px) {
             .main-container {
                 margin: 10px;
@@ -422,12 +335,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </nav>
 
         <!-- Header -->
-        <div class="header-section">
-            <h1 class="main-title">
-                <i class="fas fa-user-plus"></i> Crear Usuario
-            </h1>
-            <p class="subtitle">Agrega un nuevo usuario al sistema</p>
-        </div>
+        <h1 class="main-title">
+            <i class="fas fa-user-plus"></i> Crear Usuario
+        </h1>
 
         <!-- Alert Messages -->
         <?php if ($mensaje): ?>
@@ -585,14 +495,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     alert('La contraseña debe tener entre 5 y 10 caracteres.');
                     return;
                 }
-            });
-
-            // Animación de entrada
-            const formElements = document.querySelectorAll('.form-group-modern');
-            formElements.forEach((element, index) => {
-                setTimeout(() => {
-                    element.style.animation = 'fadeInUp 0.6s ease forwards';
-                }, index * 100);
             });
         });
     </script>

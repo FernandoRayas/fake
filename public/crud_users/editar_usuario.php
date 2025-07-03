@@ -65,12 +65,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <title>Editar Usuario</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -89,26 +85,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             padding: 40px;
             width: 100%;
             max-width: 500px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .container::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, #667eea, #764ba2, #667eea);
-            background-size: 200% 100%;
-            animation: gradient 3s ease infinite;
-        }
-
-        @keyframes gradient {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
         }
 
         .header {
@@ -119,7 +95,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         .header h2 {
             color: #2c3e50;
             font-size: 2em;
-            font-weight: 600;
             margin-bottom: 8px;
         }
 
@@ -139,7 +114,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             margin: 0 auto 20px;
             color: white;
             font-size: 2em;
-            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
         }
 
         .alert {
@@ -148,19 +122,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             padding: 15px;
             border-radius: 10px;
             margin-bottom: 20px;
-            font-weight: 500;
             text-align: center;
-            animation: shake 0.5s ease-in-out;
-        }
-
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-5px); }
-            75% { transform: translateX(5px); }
         }
 
         .form-group {
-            margin-bottom: 25px;
+            margin-bottom: 20px;
             position: relative;
         }
 
@@ -169,7 +135,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             font-weight: 600;
             margin-bottom: 8px;
             color: #2c3e50;
-            font-size: 1.1em;
         }
 
         .input-wrapper {
@@ -182,7 +147,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             top: 50%;
             transform: translateY(-50%);
             color: #7f8c8d;
-            font-size: 1.1em;
         }
 
         input, select {
@@ -192,14 +156,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             border-radius: 12px;
             font-size: 1em;
             transition: all 0.3s ease;
-            background: white;
         }
 
         input:focus, select:focus {
             outline: none;
             border-color: #667eea;
             box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-            transform: translateY(-2px);
         }
 
         select {
@@ -222,32 +184,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .submit-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-            transition: left 0.5s;
-        }
-
-        .submit-btn:hover::before {
-            left: 100%;
+            margin-bottom: 15px;
         }
 
         .submit-btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 15px 35px rgba(102, 126, 234, 0.4);
-        }
-
-        .submit-btn:active {
-            transform: translateY(0);
         }
 
         .back-link {
@@ -257,64 +199,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             color: #667eea;
             text-decoration: none;
             font-weight: 500;
-            margin-top: 20px;
             padding: 12px 20px;
             border-radius: 8px;
-            transition: all 0.3s ease;
             background: rgba(102, 126, 234, 0.1);
+            transition: all 0.3s ease;
         }
 
         .back-link:hover {
             background: rgba(102, 126, 234, 0.2);
-            transform: translateX(-5px);
         }
 
         .form-actions {
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 15px;
         }
 
-        /* Animaciones de entrada */
-        .container {
-            animation: slideIn 0.6s ease-out;
-        }
-
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .form-group {
-            animation: fadeInUp 0.6s ease-out;
-            animation-fill-mode: both;
-        }
-
-        .form-group:nth-child(1) { animation-delay: 0.1s; }
-        .form-group:nth-child(2) { animation-delay: 0.2s; }
-        .form-group:nth-child(3) { animation-delay: 0.3s; }
-        .form-group:nth-child(4) { animation-delay: 0.4s; }
-        .form-group:nth-child(5) { animation-delay: 0.5s; }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* Responsive */
         @media (max-width: 768px) {
             .container {
                 margin: 10px;
@@ -344,16 +244,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <p>Modifica los datos del usuario seleccionado</p>
     </div>
 
-    <!-- Mensaje de error si existe -->
     <?php if ($mensaje): ?>
         <div class="alert">
             <i class="fas fa-exclamation-triangle"></i> <?= $mensaje ?>
         </div>
     <?php endif; ?>
 
-    <!-- Formulario de edición -->
     <form method="POST">
-        <!-- Nombre -->
         <div class="form-group">
             <label for="name">
                 <i class="fas fa-user"></i> Nombre Completo
@@ -364,7 +261,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
         </div>
         
-        <!-- Correo -->
         <div class="form-group">
             <label for="email">
                 <i class="fas fa-envelope"></i> Correo Electrónico
@@ -375,7 +271,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
         </div>
 
-        <!-- Contraseña (opcional) -->
         <div class="form-group">
             <label for="password">
                 <i class="fas fa-lock"></i> Nueva Contraseña
@@ -386,7 +281,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
         </div>
 
-        <!-- Rol -->
         <div class="form-group">
             <label for="role">
                 <i class="fas fa-user-tag"></i> Rol del Usuario
@@ -394,26 +288,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <div class="input-wrapper">
                 <i class="fas fa-user-tag input-icon"></i>
                 <select name="role" id="role">
-                    <option value="admin" <?= $user['role'] == 'admin' ? 'selected' : '' ?>>
-                        <i class="fas fa-crown"></i> Administrador
-                    </option>
-                    <option value="master" <?= $user['role'] == 'master' ? 'selected' : '' ?>>
-                        <i class="fas fa-chalkboard-teacher"></i> Docente
-                    </option>
-                    <option value="user" <?= $user['role'] == 'user' ? 'selected' : '' ?>>
-                        <i class="fas fa-user"></i> Usuario
-                    </option>
+                    <option value="admin" <?= $user['role'] == 'admin' ? 'selected' : '' ?>>Administrador</option>
+                    <option value="master" <?= $user['role'] == 'master' ? 'selected' : '' ?>>Docente</option>
+                    <option value="user" <?= $user['role'] == 'user' ? 'selected' : '' ?>>Usuario</option>
                 </select>
             </div>
         </div>
 
         <div class="form-actions">
-            <!-- Botón -->
             <button type="submit" class="submit-btn">
                 <i class="fas fa-save"></i> Actualizar Usuario
             </button>
 
-            <!-- Enlace de regreso -->
             <a class="back-link" href="../pages/crud_users.php">
                 <i class="fas fa-arrow-left"></i> Volver a la Administración
             </a>
