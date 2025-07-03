@@ -42,6 +42,17 @@ if ($_SESSION['user_role'] === 'master' || $_SESSION['user_role'] === 'admin') {
                 height: 3rem;
             }
         }
+        .card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border: none;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+}
+
+.card:hover {
+  transform: scale(1.05); /* se hace un 5% más grande */
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.25);
+}
     </style>
 </head>
 
@@ -201,6 +212,17 @@ if ($_SESSION['user_role'] === 'master' || $_SESSION['user_role'] === 'admin') {
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="../js/courses.js"></script>
+    <script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const footers = document.querySelectorAll(".card-footer");
+    const colors = ["#FFD700", "#FF6F61", "#6A5ACD", "#20B2AA", "#FFA07A", "#87CEEB", "#98FB98", "#FFB6C1", "#FF6347", "#4682B4", "#DDA0DD", "#F08080", "#20B2AA", "#FF4500", "#32CD32", "#00CED1"];
+    
+    footers.forEach(footer => {
+      const randomColor = colors[Math.floor(Math.random() * colors.length)];
+      footer.style.backgroundColor = randomColor;
+    });
+  });
+</script>
 </body>
 
 </html>
