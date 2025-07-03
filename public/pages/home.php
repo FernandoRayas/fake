@@ -184,32 +184,96 @@ if (!isset($_SESSION['user_role'])) {
     <div class="product-container">
         <!-- Producto 1 -->
         <div class="product">
-            <img src="../images/tennis1.jpg" alt="Tenis 1">
-            <p class="product-name">Tenis Modelo A</p>
+            <img src="https://images.unsplash.com/photo-1549298916-b41d501d3772?w=400&h=300&fit=crop" alt="Nike Air Max">
+            <p class="product-name">Nike Air Max 90</p>
             <p class="product-price">$59.99</p>
             <button class="btn-buy">Comprar</button>
         </div>
 
         <!-- Producto 2 -->
         <div class="product">
-            <img src="../images/tennis2.jpg" alt="Tenis 2">
-            <p class="product-name">Tenis Modelo B</p>
+            <img src="https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?w=400&h=300&fit=crop" alt="Adidas Ultraboost">
+            <p class="product-name">Adidas Ultraboost 22</p>
             <p class="product-price">$69.99</p>
             <button class="btn-buy">Comprar</button>
         </div>
 
         <!-- Producto 3 -->
         <div class="product">
-            <img src="../images/tennis3.jpg" alt="Tenis 3">
-            <p class="product-name">Tenis Modelo C</p>
+            <img src="https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=400&h=300&fit=crop" alt="Converse Chuck Taylor">
+            <p class="product-name">Converse Chuck Taylor</p>
             <p class="product-price">$79.99</p>
             <button class="btn-buy">Comprar</button>
         </div>
 
         <!-- Producto 4 -->
         <div class="product">
-            <img src="../images/tennis4.jpg" alt="Tenis 4">
-            <p class="product-name">Tenis Modelo D</p>
+            <img src="https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=400&h=300&fit=crop" alt="Vans Old Skool">
+            <p class="product-name">Vans Old Skool</p>
+            <p class="product-price">$89.99</p>
+            <button class="btn-buy">Comprar</button>
+        </div>
+
+         <!-- Producto 5 -->
+        <div class="product">
+            <img src="https://images.unsplash.com/photo-1584735175315-9d5df23860e6?w=400&h=300&fit=crop" alt="Puma Suede Classic">
+            <p class="product-name">Puma Suede Classic</p>
+            <p class="product-price">$89.99</p>
+            <button class="btn-buy">Comprar</button>
+        </div>
+
+         <!-- Producto 6 -->
+        <div class="product">
+            <img src="https://images.unsplash.com/photo-1608231387042-66d1773070a5?w=400&h=300&fit=crop" alt="New Balance 574">
+            <p class="product-name">New Balance 574</p>
+            <p class="product-price">$89.99</p>
+            <button class="btn-buy">Comprar</button>
+        </div>
+
+         <!-- Producto 7 -->
+        <div class="product">
+            <img src="https://images.unsplash.com/photo-1551107696-a4b0c5a0d9a2?w=400&h=300&fit=crop" alt="Reebok Classic">
+            <p class="product-name">Reebok Classic Leather</p>
+            <p class="product-price">$89.99</p>
+            <button class="btn-buy">Comprar</button>
+        </div>
+
+        <!-- Producto 8 -->
+        <div class="product">
+            <img src="https://images.unsplash.com/photo-1543508282-6319a3e2621f?w=400&h=300&fit=crop" alt="Jordan 1 Retro">
+            <p class="product-name">Jordan 1 Retro High</p>
+            <p class="product-price">$89.99</p>
+            <button class="btn-buy">Comprar</button>
+        </div>
+
+        <!-- Producto 9 -->
+        <div class="product">
+            <img src="https://images.unsplash.com/photo-1520256862855-398228c41684?w=400&h=300&fit=crop" alt="Fila Disruptor">
+            <p class="product-name">Fila Disruptor II</p>
+            <p class="product-price">$89.99</p>
+            <button class="btn-buy">Comprar</button>
+        </div>
+
+        <!-- Producto 10 -->
+        <div class="product">
+            <img src="https://images.unsplash.com/photo-1552066344-2464c1135c32?w=400&h=300&fit=crop" alt="Under Armour Charged">
+            <p class="product-name">Under Armour Charged</p>
+            <p class="product-price">$89.99</p>
+            <button class="btn-buy">Comprar</button>
+        </div>
+
+        <!-- Producto 11 -->
+        <div class="product">
+            <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=300&fit=crop" alt="Asics Gel-Kayano">
+            <p class="product-name">Asics Gel-Kayano</p>
+            <p class="product-price">$89.99</p>
+            <button class="btn-buy">Comprar</button>
+        </div>
+
+        <!-- Producto 12 -->
+        <div class="product">
+            <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&h=300&fit=crop" alt="Nike Air Force 1">
+            <p class="product-name">Nike Air Force 1</p>
             <p class="product-price">$89.99</p>
             <button class="btn-buy">Comprar</button>
         </div>
