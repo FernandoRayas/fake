@@ -45,55 +45,43 @@ $result = $stmt->get_result();
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            --success-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-            --warning-gradient: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
-            --danger-gradient: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
-            --dark-gradient: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+            --primary-bg: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --text-primary: #2c3e50;
+            --text-secondary: #6c757d;
+            --shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            --radius: 15px;
         }
 
         body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: var(--primary-bg);
             min-height: 100vh;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
         .main-container {
-            background: rgba(255, 255, 255, 0.95);
+            background: var(--card-bg);
             backdrop-filter: blur(10px);
             border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            box-shadow: var(--shadow);
             margin: 20px auto;
             padding: 30px;
             max-width: 95%;
         }
 
-        .header-section {
+        .main-title {
+            background: var(--primary-bg);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 2.5rem;
+            font-weight: 700;
             text-align: center;
             margin-bottom: 30px;
         }
 
-        .main-title {
-            background: var(--primary-gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 10px;
-            animation: slideInDown 0.8s ease;
-        }
-
-        .subtitle {
-            color: #6c757d;
-            font-size: 1.1rem;
-            margin-bottom: 20px;
-        }
-
         .breadcrumb-modern {
             background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-            border-radius: 15px;
+            border-radius: var(--radius);
             padding: 15px 20px;
             margin-bottom: 25px;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
@@ -108,14 +96,6 @@ $result = $stmt->get_result();
 
         .breadcrumb-modern .breadcrumb-item a:hover {
             color: #4f46e5;
-            transform: translateX(2px);
-        }
-
-        .action-buttons {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 25px;
-            flex-wrap: wrap;
         }
 
         .btn-modern {
@@ -124,50 +104,22 @@ $result = $stmt->get_result();
             font-weight: 600;
             border: none;
             transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
 
-        .btn-modern::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-            transition: left 0.5s ease;
-        }
-
-        .btn-modern:hover::before {
-            left: 100%;
-        }
-
         .btn-modern:hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            box-shadow: var(--shadow);
         }
 
-        .btn-primary-modern {
-            background: var(--primary-gradient);
-            color: white;
-        }
+        .btn-primary-modern { background: var(--primary-bg); color: white; }
+        .btn-success-modern { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: white; }
+        .btn-danger-modern { background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); color: white; }
 
-        .btn-success-modern {
-            background: var(--success-gradient);
-            color: white;
-        }
-
-        .btn-danger-modern {
-            background: var(--danger-gradient);
-            color: white;
-        }
-
-        .search-container {
+        .search-container, .table-container {
             background: white;
-            border-radius: 15px;
+            border-radius: var(--radius);
             padding: 20px;
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
             margin-bottom: 25px;
@@ -177,30 +129,16 @@ $result = $stmt->get_result();
             border: 2px solid #e9ecef;
             border-radius: 12px;
             padding: 15px 20px;
-            font-size: 1rem;
             transition: all 0.3s ease;
         }
 
         .search-input:focus {
             border-color: #667eea;
             box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
-            transform: translateY(-1px);
-        }
-
-        .table-container {
-            background: white;
-            border-radius: 15px;
-            overflow: hidden;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
-            animation: fadeInUp 0.8s ease;
-        }
-
-        .table-modern {
-            margin-bottom: 0;
         }
 
         .table-modern thead {
-            background: var(--dark-gradient);
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
         }
 
         .table-modern thead th {
@@ -210,18 +148,11 @@ $result = $stmt->get_result();
             border: none;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            font-size: 0.9rem;
-        }
-
-        .table-modern tbody tr {
-            transition: all 0.3s ease;
-            border-bottom: 1px solid #f8f9fa;
         }
 
         .table-modern tbody tr:hover {
             background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
             transform: scale(1.01);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
         }
 
         .table-modern tbody td {
@@ -234,7 +165,7 @@ $result = $stmt->get_result();
             width: 40px;
             height: 40px;
             border-radius: 50%;
-            background: var(--primary-gradient);
+            background: var(--primary-bg);
             display: inline-flex;
             align-items: center;
             justify-content: center;
@@ -243,20 +174,9 @@ $result = $stmt->get_result();
             margin-right: 10px;
         }
 
-        .user-info {
-            display: flex;
-            align-items: center;
-        }
-
-        .user-name {
-            font-weight: 600;
-            color: #2c3e50;
-        }
-
-        .user-email {
-            color: #6c757d;
-            font-size: 0.9rem;
-        }
+        .user-info { display: flex; align-items: center; }
+        .user-name { font-weight: 600; color: var(--text-primary); }
+        .user-email { color: var(--text-secondary); font-size: 0.9rem; }
 
         .role-badge {
             padding: 6px 12px;
@@ -264,22 +184,16 @@ $result = $stmt->get_result();
             font-size: 0.8rem;
             font-weight: 600;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
         }
 
         .role-admin {
-            background: var(--danger-gradient);
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
             color: white;
         }
 
         .role-user {
-            background: var(--success-gradient);
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
             color: white;
-        }
-
-        .action-buttons-table {
-            display: flex;
-            gap: 8px;
         }
 
         .btn-action {
@@ -287,18 +201,18 @@ $result = $stmt->get_result();
             border-radius: 8px;
             border: none;
             font-size: 0.8rem;
-            font-weight: 500;
+            margin: 0 2px;
             transition: all 0.3s ease;
             cursor: pointer;
         }
 
         .btn-edit {
-            background: var(--warning-gradient);
+            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
             color: white;
         }
 
         .btn-delete {
-            background: var(--danger-gradient);
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
             color: white;
         }
 
@@ -316,7 +230,7 @@ $result = $stmt->get_result();
 
         .stat-card {
             background: white;
-            border-radius: 15px;
+            border-radius: var(--radius);
             padding: 20px;
             text-align: center;
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
@@ -331,20 +245,19 @@ $result = $stmt->get_result();
         .stat-icon {
             font-size: 2rem;
             margin-bottom: 10px;
-            background: var(--primary-gradient);
+            background: var(--primary-bg);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            background-clip: text;
         }
 
         .stat-number {
             font-size: 1.8rem;
             font-weight: 700;
-            color: #2c3e50;
+            color: var(--text-primary);
         }
 
         .stat-label {
-            color: #6c757d;
+            color: var(--text-secondary);
             font-size: 0.9rem;
             margin-top: 5px;
         }
@@ -352,7 +265,7 @@ $result = $stmt->get_result();
         .no-data {
             text-align: center;
             padding: 40px;
-            color: #6c757d;
+            color: var(--text-secondary);
         }
 
         .no-data i {
@@ -361,44 +274,17 @@ $result = $stmt->get_result();
             opacity: 0.5;
         }
 
-        @keyframes slideInDown {
-            from {
-                transform: translateY(-30px);
-                opacity: 0;
-            }
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
-        }
-
-        @keyframes fadeInUp {
-            from {
-                transform: translateY(20px);
-                opacity: 0;
-            }
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
         }
 
         @media (max-width: 768px) {
-            .main-title {
-                font-size: 2rem;
-            }
-            
-            .action-buttons {
-                flex-direction: column;
-            }
-            
-            .btn-modern {
-                width: 100%;
-            }
-            
-            .table-responsive {
-                border-radius: 15px;
-            }
+            .main-title { font-size: 2rem; }
+            .action-buttons { flex-direction: column; }
+            .btn-modern { width: 100%; }
         }
     </style>
 </head>
@@ -419,12 +305,9 @@ $result = $stmt->get_result();
         </nav>
 
         <!-- Header -->
-        <div class="header-section">
-            <h1 class="main-title">
-                <i class="fas fa-users-cog"></i> Gestión de Usuarios
-            </h1>
-            <p class="subtitle">Administra y controla todos los usuarios del sistema</p>
-        </div>
+        <h1 class="main-title">
+            <i class="fas fa-users-cog"></i> Gestión de Usuarios
+        </h1>
 
         <!-- Stats Cards -->
         <div class="stats-cards">
@@ -550,17 +433,15 @@ $result = $stmt->get_result();
                                     </span>
                                 </td>
                                 <td>
-                                    <div class="action-buttons-table">
-                                        <a href="../crud_users/editar_usuario.php?id=<?= $row['id'] ?>" 
-                                           class="btn-action btn-edit" title="Editar usuario">
-                                            <i class="fas fa-edit"></i>
-                                        </a>
-                                        <a href="../crud_users/eliminar_usuario.php?id=<?= $row['id'] ?>" 
-                                           class="btn-action btn-delete" title="Eliminar usuario"
-                                           onclick="return confirm('¿Estás seguro de que deseas eliminar este usuario?')">
-                                            <i class="fas fa-trash-alt"></i>
-                                        </a>
-                                    </div>
+                                    <a href="../crud_users/editar_usuario.php?id=<?= $row['id'] ?>" 
+                                       class="btn-action btn-edit" title="Editar usuario">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <a href="../crud_users/eliminar_usuario.php?id=<?= $row['id'] ?>" 
+                                       class="btn-action btn-delete" title="Eliminar usuario"
+                                       onclick="return confirm('¿Estás seguro de que deseas eliminar este usuario?')">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </a>
                                 </td>
                             </tr>
                         <?php 
@@ -587,30 +468,5 @@ $result = $stmt->get_result();
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        // Animaciones adicionales
-        document.addEventListener('DOMContentLoaded', function() {
-            // Animar cards de estadísticas
-            const statCards = document.querySelectorAll('.stat-card');
-            statCards.forEach((card, index) => {
-                setTimeout(() => {
-                    card.style.animation = 'fadeInUp 0.6s ease forwards';
-                }, index * 100);
-            });
-
-            // Animar filas de la tabla
-            const tableRows = document.querySelectorAll('tbody tr');
-            tableRows.forEach((row, index) => {
-                setTimeout(() => {
-                    row.style.animation = 'fadeInUp 0.4s ease forwards';
-                }, index * 50);
-            });
-        });
-
-        // Confirmar eliminación con estilo
-        function confirmDelete(userName) {
-            return confirm(`¿Estás seguro de que deseas eliminar al usuario "${userName}"?\n\nEsta acción no se puede deshacer.`);
-        }
-    </script>
 </body>
 </html>
